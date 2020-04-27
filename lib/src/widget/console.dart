@@ -7,7 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' hide TextDirection;
+import 'package:oktoast/oktoast.dart';
 
 part 'console_panel.dart';
 
@@ -53,7 +55,6 @@ OverlayEntry consolePanelEntry;
 ///show console panel
 showConsolePanel(Function onHideTap, {BuildContext context}) {
   context ??= _contextMap.values.first;
-
   consolePanelEntry = OverlayEntry(builder: (ctx) {
     return ConsolePanel(() {
       onHideTap?.call();
@@ -110,17 +111,34 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
   }
 
   Widget build(BuildContext context) {
-    return _ConsoleTheme(
-      consoleBtn: widget.consoleBtn,
-      consolePosition: widget.consolePosition,
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Overlay(initialEntries: [
-          OverlayEntry(builder: (ctx) {
-            _contextMap[this] = ctx;
-            return widget.child;
-          })
-        ]),
+    return Localizations(
+      locale: Locale("zh"),
+      delegates: [
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      child: MediaQuery(
+        data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
+        child: Material(
+          child: OKToast(
+            textPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            textStyle: TextStyle(fontSize: 16, color: Colors.white),
+            child: _ConsoleTheme(
+              consoleBtn: widget.consoleBtn,
+              consolePosition: widget.consolePosition,
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: Overlay(initialEntries: [
+                  OverlayEntry(builder: (ctx) {
+                    _contextMap[this] = ctx;
+                    return widget.child;
+                  })
+                ]),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

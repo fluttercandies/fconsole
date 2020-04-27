@@ -41,11 +41,13 @@ class _MyAppState extends State<MyApp> {
             builder: (ctx) {
               return FlatButton(
                 onPressed: () {
-                  Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) {
-                    return Scaffold(
-                      appBar: AppBar(),
-                    );
-                  }));
+//                  Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) {
+//                    return Scaffold(
+//                      appBar: AppBar(),
+//                    );
+//                  }));
+                  FConsole.log("asdadasd");
+                  showToast("1213123");
                 },
                 child: Center(
                   child: Text('Running on: $_platformVersion\n'),
@@ -60,9 +62,8 @@ class _MyAppState extends State<MyApp> {
                   showConsole();
                 },
                 child: Container(
-                  width: 50,
                   height: 50,
-                  color: Colors.red,
+                  child: Text("show console"),
                 ),
               );
             },

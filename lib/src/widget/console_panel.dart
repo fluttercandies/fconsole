@@ -21,26 +21,34 @@ class _ConsolePanelState extends State<ConsolePanel> {
           FocusScope.of(context).requestFocus(FocusNode());
         },
         behavior: HitTestBehavior.translucent,
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            color: Colors.white,
-            width: double.infinity,
-            height: MediaQueryData.fromWindow(window).size.height * 0.8,
-            child: Column(
-              children: <Widget>[
-                topOpViews(),
-                Expanded(
-                  child: IndexedStack(
-                    index: currentIndex,
-                    children: <Widget>[LogInfoPannel(), SystemInfoPannel()],
+        child: Column(
+          children: <Widget>[
+            Expanded(
+                child: GestureDetector(
+              onTap: () {
+                widget.onHideTap?.call();
+              },
+              behavior: HitTestBehavior.translucent,
+            )),
+            Container(
+              alignment: Alignment.bottomCenter,
+              color: Colors.white,
+              width: double.infinity,
+              height: MediaQueryData.fromWindow(window).size.height * 0.8,
+              child: Column(
+                children: <Widget>[
+                  topOpViews(),
+                  Expanded(
+                    child: IndexedStack(
+                      index: currentIndex,
+                      children: <Widget>[LogInfoPannel(), SystemInfoPannel()],
+                    ),
                   ),
-                ),
-                bottomOpViews()
-              ],
+                  bottomOpViews()
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -118,7 +126,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
               child: CupertinoButton(
                 padding: EdgeInsets.zero,
                 onPressed: () {
-                  if (currentIndex == 1) {
+                  if (currentIndex == 0) {
                     FConsole.instance.clear();
                   }
                 },
@@ -309,32 +317,41 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
             child: ListView.builder(
           itemBuilder: (ctx, index) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      if (FConsole.instance.options.showTime)
-                        Text(time(newlogs[index]) + " : ",
+                GestureDetector(
+                  onLongPress: () {
+                    Clipboard.setData(
+                        ClipboardData(text: newlogs[index].toString()));
+                    showToast("Copy Success");
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        if (FConsole.instance.options.showTime)
+                          Text(time(newlogs[index]) + " : ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black54,
+                                  fontSize: 16)),
+                        Expanded(
+                          child: Text(
+                            newlogs[index].toString(),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black54,
-                                fontSize: 16)),
-                      Expanded(
-                        child: Text(
-                          newlogs[index].toString(),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: currentIndex == 2
-                                  ? Colors.red
-                                  : Colors.black54,
-                              fontSize: 16),
+                                color: currentIndex == 2
+                                    ? Colors.red
+                                    : Colors.black54,
+                                fontSize: 16),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Divider(height: 1)
@@ -351,7 +368,6 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
     super.initState();
     currentIndex = widget.currentIndex;
     logs = FConsole.instance.logs(currentIndex);
-
     FConsole.instance.addConsoleLogListener(this);
   }
 
@@ -391,14 +407,12 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: MediaQuery(
-              data: MediaQueryData.fromWindow(window),
-              child: CupertinoTextField(
-                controller: _filterTEC,
-                clearButtonMode: OverlayVisibilityMode.editing,
-                style: TextStyle(color: Colors.black, fontSize: 16),
-                decoration: BoxDecoration(),
-              ),
+            child: CupertinoTextField(
+              toolbarOptions: ToolbarOptions(),
+              controller: _filterTEC,
+              clearButtonMode: OverlayVisibilityMode.editing,
+              style: TextStyle(color: Colors.black, fontSize: 16),
+              decoration: BoxDecoration(),
             ),
           ),
           GestureDetector(

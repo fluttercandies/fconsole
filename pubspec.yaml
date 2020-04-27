@@ -10,9 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   sensors: '>=0.4.2 <2.0.0'
   device_info: ^0.4.2+2
-  intl: ^0.16.1
+  intl: ^0.16.0
+  oktoast: ^2.3.2
 
 dev_dependencies:
   flutter_test:
