@@ -1,4 +1,5 @@
 import 'package:fconsole/src/core/log.dart';
+
 import 'shake_detector.dart';
 
 class FConsole {
@@ -101,13 +102,13 @@ class FConsole {
 
   void clear() {
     if (currentLogIndex == 0) {
-      FConsole.instance.allLog.clear();
+      allLog.clear();
     } else if (currentLogIndex == 1) {
-      FConsole.instance.verboselog.clear();
+      verboselog.clear();
     } else if (currentLogIndex == 2) {
-      FConsole.instance.errorLog.clear();
+      errorLog.clear();
     }
-    FConsole.instance.notifyClearLog();
+    notifyClearLog();
   }
 }
 

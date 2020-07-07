@@ -57,13 +57,12 @@ class _ConsolePanelState extends State<ConsolePanel> {
   Widget topOpViews() {
     return Container(
       height: 50,
-      decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
+      decoration: BoxDecoration(color: Colors.grey[100], border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
+            width: 80,
             color: currentIndex == 0 ? Colors.white : Colors.transparent,
             padding: EdgeInsets.symmetric(horizontal: 15),
             child: GestureDetector(
@@ -75,8 +74,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
               },
               behavior: HitTestBehavior.translucent,
               child: Center(
-                child: Text("Log",
-                    style: TextStyle(color: Colors.black, fontSize: 18)),
+                child: Text("Log", style: TextStyle(color: Colors.black, fontSize: 18)),
               ),
             ),
           ),
@@ -112,11 +110,8 @@ class _ConsolePanelState extends State<ConsolePanel> {
   Widget bottomOpViews() {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.only(
-          bottom: MediaQueryData.fromWindow(window).padding.bottom),
-      decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: Border(top: BorderSide(color: Colors.grey, width: 0.2))),
+      padding: EdgeInsets.only(bottom: MediaQueryData.fromWindow(window).padding.bottom),
+      decoration: BoxDecoration(color: Colors.grey[100], border: Border(top: BorderSide(color: Colors.grey, width: 0.2))),
       child: Container(
         height: 50,
         child: Row(
@@ -160,8 +155,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
     );
   }
 
-  get isDark =>
-      MediaQueryData.fromWindow(window).platformBrightness == Brightness.dark;
+  get isDark => MediaQueryData.fromWindow(window).platformBrightness == Brightness.dark;
 }
 
 class LogInfoPannel extends StatefulWidget {
@@ -169,45 +163,35 @@ class LogInfoPannel extends StatefulWidget {
   _LogInfoPannelState createState() => _LogInfoPannelState();
 }
 
-class _LogInfoPannelState extends State<LogInfoPannel>
-    with SingleTickerProviderStateMixin {
-  TabController tabController;
+class _LogInfoPannelState extends State<LogInfoPannel> with SingleTickerProviderStateMixin {
+  int _currentTabIndex = 0;
 
-  List<Widget> _logViewList = [
-    _LogListView(0),
-    _LogListView(1),
-    _LogListView(2)
-  ];
+  int get currentIndex => _currentTabIndex; //0 all 1 log 2 error
 
-  int currentIndex = 0; //0 all 1 log 2 error
+  set currentIndex(int index) {
+    _currentTabIndex = index;
+    FConsole.instance.currentLogIndex = _currentTabIndex;
+  }
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
-    tabController.addListener(() {
-      currentIndex = tabController.index;
-      FConsole.instance.currentLogIndex = currentIndex;
-      setState(() {});
-    });
   }
 
   @override
   void dispose() {
-    tabController.dispose();
     super.dispose();
   }
 
   Widget tabbar() {
     return Container(
       height: 40,
-      decoration: BoxDecoration(
-          color: Colors.grey[100],
-          border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
+      decoration: BoxDecoration(color: Colors.grey[100], border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
+            width: 80,
             color: currentIndex == 0 ? Colors.white : Colors.transparent,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
@@ -219,12 +203,12 @@ class _LogInfoPannelState extends State<LogInfoPannel>
               },
               behavior: HitTestBehavior.translucent,
               child: Center(
-                child: Text("All",
-                    style: TextStyle(color: Colors.black, fontSize: 16)),
+                child: Text("All", style: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
           ),
           Container(
+            width: 80,
             color: currentIndex == 1 ? Colors.white : Colors.transparent,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
@@ -236,8 +220,7 @@ class _LogInfoPannelState extends State<LogInfoPannel>
               },
               behavior: HitTestBehavior.translucent,
               child: Center(
-                child: Text("Log",
-                    style: TextStyle(color: Colors.black, fontSize: 16)),
+                child: Text("Log", style: TextStyle(color: Colors.black, fontSize: 16)),
               ),
             ),
           ),
@@ -247,6 +230,7 @@ class _LogInfoPannelState extends State<LogInfoPannel>
             color: Colors.grey[300],
           ),
           Container(
+            width: 80,
             color: currentIndex == 2 ? Colors.white : Colors.transparent,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
@@ -274,16 +258,10 @@ class _LogInfoPannelState extends State<LogInfoPannel>
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.grey[100],
-                border:
-                    Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
-            child: tabbar()),
+        Container(width: double.infinity, decoration: BoxDecoration(color: Colors.grey[100], border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))), child: tabbar()),
         Expanded(
           child: IndexedStack(
-            children: _logViewList,
+            children: [_LogListView(0), _LogListView(1), _LogListView(2)],
             index: currentIndex,
           ),
         )
@@ -322,32 +300,20 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
               children: <Widget>[
                 GestureDetector(
                   onLongPress: () {
-                    Clipboard.setData(
-                        ClipboardData(text: newlogs[index].toString()));
+                    Clipboard.setData(ClipboardData(text: newlogs[index].toString()));
                     showToast("Copy Success");
                   },
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        if (FConsole.instance.options.showTime)
-                          Text(time(newlogs[index]) + " : ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black54,
-                                  fontSize: 16)),
+                        if (FConsole.instance.options.showTime) Text(time(newlogs[index]) + " : ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54, fontSize: 16)),
                         Expanded(
                           child: Text(
                             newlogs[index].toString(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: currentIndex == 2
-                                    ? Colors.red
-                                    : Colors.black54,
-                                fontSize: 16),
+                            style: TextStyle(fontWeight: FontWeight.bold, color: currentIndex == 2 ? Colors.red : Colors.black54, fontSize: 16),
                           ),
                         ),
                       ],
@@ -379,9 +345,7 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
 
   String time(Log log) {
     if (FConsole.instance.options.showTime) {
-      return DateFormat(FConsole.instance.options.timeFormat)
-              .format(log.dateTime) ??
-          "";
+      return DateFormat(FConsole.instance.options.timeFormat).format(log.dateTime) ?? "";
     }
     return "";
   }
@@ -402,8 +366,7 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
   Widget filterView() {
     return Container(
       height: 40,
-      decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -466,25 +429,15 @@ class _SystemInfoPannelState extends State<SystemInfoPannel> {
   }
 
   Future<void> initPlatformState() async {
-    Map<String, dynamic> deviceData;
-
     try {
       if (Platform.isAndroid) {
-        deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+        _deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
       } else if (Platform.isIOS) {
-        deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+        _deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
       }
     } on PlatformException {
-      deviceData = <String, dynamic>{
-        'Error:': 'Failed to get platform version.'
-      };
+      _deviceData = <String, dynamic>{'Error:': 'Failed to get platform version.'};
     }
-
-    if (!mounted) return;
-
-    setState(() {
-      _deviceData = deviceData;
-    });
   }
 
   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
@@ -546,8 +499,7 @@ class _SystemInfoPannelState extends State<SystemInfoPannel> {
             Row(
               children: <Widget>[
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                   child: Text(
                     property,
                     style: const TextStyle(
