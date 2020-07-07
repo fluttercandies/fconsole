@@ -438,6 +438,11 @@ class _SystemInfoPannelState extends State<SystemInfoPannel> {
     } on PlatformException {
       _deviceData = <String, dynamic>{'Error:': 'Failed to get platform version.'};
     }
+    if(mounted){
+      setState(() {
+
+      });
+    }
   }
 
   Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
@@ -503,6 +508,7 @@ class _SystemInfoPannelState extends State<SystemInfoPannel> {
                   child: Text(
                     property,
                     style: const TextStyle(
+                      color: Colors.black54,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
