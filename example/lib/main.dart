@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
 //                    );
 //                  }));
                   FConsole.log("asdadasd");
-                  showToast("1213123");
+                  // showToast("1213123");
                 },
                 child: Center(
                   child: Text('Running on: $_platformVersion\n'),

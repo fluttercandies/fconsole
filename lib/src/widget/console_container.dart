@@ -7,11 +7,7 @@ Widget _consoleBtn() {
       borderRadius: BorderRadius.circular(3),
       color: Colors.green,
     ),
-    child: Text(
-      "Console",
-      style: TextStyle(
-          color: Colors.white, fontSize: 16, decoration: TextDecoration.none),
-    ),
+    child: StText.normal('Console'),
   );
 }
 

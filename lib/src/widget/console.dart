@@ -3,6 +3,8 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:fconsole/src/core/fconsole.dart';
 import 'package:fconsole/src/core/log.dart';
+import 'package:fconsole/src/style/color.dart';
+import 'package:fconsole/src/style/text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info/device_info.dart';
@@ -122,8 +124,8 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
         data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
         child: Material(
           child: OKToast(
-            textPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            textStyle: TextStyle(fontSize: 16, color: Colors.white),
+            radius: 4,
+            backgroundColor: ColorPlate.black.withOpacity(0.6),
             child: _ConsoleTheme(
               consoleBtn: widget.consoleBtn,
               consolePosition: widget.consolePosition,

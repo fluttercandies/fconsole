@@ -79,16 +79,17 @@ class FConsole {
     }
   }
 
-  List<Log> logs(int currentLogIndex) {
-    if (currentLogIndex == 0) {
+  List<Log> logs(int logType) {
+    if (logType == 0) {
       return allLog;
     }
-    if (currentLogIndex == 1) {
+    if (logType == 1) {
       return verboselog;
     }
-    if (currentLogIndex == 2) {
+    if (logType == 2) {
       return errorLog;
     }
+    return null;
   }
 
   static error(dynamic error) {

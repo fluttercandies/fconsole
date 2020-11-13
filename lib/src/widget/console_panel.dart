@@ -14,8 +14,111 @@ class _ConsolePanelState extends State<ConsolePanel> {
 
   @override
   Widget build(BuildContext context) {
+    var topOpViews = Container(
+      height: 50,
+      decoration: BoxDecoration(
+        color: ColorPlate.lightGray,
+        border: Border(
+          bottom: BorderSide(color: ColorPlate.gray, width: 0.2),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 80,
+            color: currentIndex == 0 ? ColorPlate.white : ColorPlate.clear,
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: GestureDetector(
+              onTap: () {
+                if (currentIndex != 0) {
+                  currentIndex = 0;
+                  setState(() {});
+                }
+              },
+              behavior: HitTestBehavior.translucent,
+              child: Center(
+                child: StText.big('Log'),
+              ),
+            ),
+          ),
+          Container(
+            width: 0.5,
+            height: double.infinity,
+            color: ColorPlate.lightGray,
+          ),
+          Container(
+            color: currentIndex == 1 ? ColorPlate.white : ColorPlate.clear,
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: GestureDetector(
+              onTap: () {
+                if (currentIndex != 1) {
+                  currentIndex = 1;
+                  setState(() {});
+                }
+              },
+              behavior: HitTestBehavior.translucent,
+              child: Center(
+                child: StText.big("System"),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    var bottomOpViews = Container(
+      width: double.infinity,
+      padding: EdgeInsets.only(
+          bottom: MediaQueryData.fromWindow(window).padding.bottom),
+      decoration: BoxDecoration(
+        color: ColorPlate.lightGray,
+        border: Border(
+          top: BorderSide(color: ColorPlate.gray, width: 0.2),
+        ),
+      ),
+      child: Container(
+        height: 50,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: CupertinoButton(
+                padding: EdgeInsets.zero,
+                onPressed: () {
+                  if (currentIndex == 0) {
+                    FConsole.instance.clear();
+                  }
+                },
+                child: Center(
+                  child: StText.normal("Clear"),
+                ),
+              ),
+            ),
+            Container(
+              width: 1,
+              height: 30,
+              color: ColorPlate.gray,
+            ),
+            Expanded(
+              child: CupertinoButton(
+                onPressed: () {
+                  widget.onHideTap?.call();
+                },
+                padding: EdgeInsets.zero,
+                child: Center(
+                  child: StText.normal(
+                    "Hide",
+                    style: TextStyle(color: ColorPlate.black),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
     return Material(
-      color: Colors.black26,
+      color: ColorPlate.black.withOpacity(0.3),
       child: GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -32,19 +135,22 @@ class _ConsolePanelState extends State<ConsolePanel> {
             )),
             Container(
               alignment: Alignment.bottomCenter,
-              color: Colors.white,
+              color: ColorPlate.white,
               width: double.infinity,
               height: MediaQueryData.fromWindow(window).size.height * 0.8,
               child: Column(
                 children: <Widget>[
-                  topOpViews(),
+                  topOpViews,
                   Expanded(
                     child: IndexedStack(
                       index: currentIndex,
-                      children: <Widget>[LogInfoPannel(), SystemInfoPannel()],
+                      children: <Widget>[
+                        LogInfoPannel(),
+                        SystemInfoPannel(),
+                      ],
                     ),
                   ),
-                  bottomOpViews()
+                  bottomOpViews
                 ],
               ),
             ),
@@ -54,108 +160,8 @@ class _ConsolePanelState extends State<ConsolePanel> {
     );
   }
 
-  Widget topOpViews() {
-    return Container(
-      height: 50,
-      decoration: BoxDecoration(color: Colors.grey[100], border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 80,
-            color: currentIndex == 0 ? Colors.white : Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 0) {
-                  currentIndex = 0;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: Text("Log", style: TextStyle(color: Colors.black, fontSize: 18)),
-              ),
-            ),
-          ),
-          Container(
-            width: 0.5,
-            height: double.infinity,
-            color: Colors.grey[300],
-          ),
-          Container(
-            color: currentIndex == 1 ? Colors.white : Colors.transparent,
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 1) {
-                  currentIndex = 1;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: Text(
-                  "System",
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget bottomOpViews() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.only(bottom: MediaQueryData.fromWindow(window).padding.bottom),
-      decoration: BoxDecoration(color: Colors.grey[100], border: Border(top: BorderSide(color: Colors.grey, width: 0.2))),
-      child: Container(
-        height: 50,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  if (currentIndex == 0) {
-                    FConsole.instance.clear();
-                  }
-                },
-                child: Center(
-                  child: Text("Clear", style: TextStyle(color: Colors.black)),
-                ),
-              ),
-            ),
-            Container(
-              width: 1,
-              height: 30,
-              color: Colors.grey[300],
-            ),
-            Expanded(
-              child: CupertinoButton(
-                onPressed: () {
-                  widget.onHideTap?.call();
-                },
-                padding: EdgeInsets.zero,
-                child: Center(
-                  child: Text(
-                    "Hide",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  get isDark => MediaQueryData.fromWindow(window).platformBrightness == Brightness.dark;
+  get isDark =>
+      MediaQueryData.fromWindow(window).platformBrightness == Brightness.dark;
 }
 
 class LogInfoPannel extends StatefulWidget {
@@ -163,7 +169,8 @@ class LogInfoPannel extends StatefulWidget {
   _LogInfoPannelState createState() => _LogInfoPannelState();
 }
 
-class _LogInfoPannelState extends State<LogInfoPannel> with SingleTickerProviderStateMixin {
+class _LogInfoPannelState extends State<LogInfoPannel>
+    with SingleTickerProviderStateMixin {
   int _currentTabIndex = 0;
 
   int get currentIndex => _currentTabIndex; //0 all 1 log 2 error
@@ -183,16 +190,22 @@ class _LogInfoPannelState extends State<LogInfoPannel> with SingleTickerProvider
     super.dispose();
   }
 
-  Widget tabbar() {
-    return Container(
+  @override
+  Widget build(BuildContext context) {
+    var tabbar = Container(
       height: 40,
-      decoration: BoxDecoration(color: Colors.grey[100], border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
+      decoration: BoxDecoration(
+        color: ColorPlate.lightGray,
+        border: Border(
+          bottom: BorderSide(color: ColorPlate.gray, width: 0.2),
+        ),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
             width: 80,
-            color: currentIndex == 0 ? Colors.white : Colors.transparent,
+            color: currentIndex == 0 ? ColorPlate.white : ColorPlate.clear,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
               onTap: () {
@@ -203,13 +216,18 @@ class _LogInfoPannelState extends State<LogInfoPannel> with SingleTickerProvider
               },
               behavior: HitTestBehavior.translucent,
               child: Center(
-                child: Text("All", style: TextStyle(color: Colors.black, fontSize: 16)),
+                child: StText.normal("All"),
               ),
             ),
           ),
           Container(
+            width: 0.5,
+            height: double.infinity,
+            color: ColorPlate.gray,
+          ),
+          Container(
             width: 80,
-            color: currentIndex == 1 ? Colors.white : Colors.transparent,
+            color: currentIndex == 1 ? ColorPlate.white : ColorPlate.clear,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
               onTap: () {
@@ -220,18 +238,18 @@ class _LogInfoPannelState extends State<LogInfoPannel> with SingleTickerProvider
               },
               behavior: HitTestBehavior.translucent,
               child: Center(
-                child: Text("Log", style: TextStyle(color: Colors.black, fontSize: 16)),
+                child: StText.normal("Log"),
               ),
             ),
           ),
           Container(
             width: 0.5,
             height: double.infinity,
-            color: Colors.grey[300],
+            color: ColorPlate.gray,
           ),
           Container(
             width: 80,
-            color: currentIndex == 2 ? Colors.white : Colors.transparent,
+            color: currentIndex == 2 ? ColorPlate.white : ColorPlate.clear,
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
               onTap: () {
@@ -242,23 +260,25 @@ class _LogInfoPannelState extends State<LogInfoPannel> with SingleTickerProvider
               },
               behavior: HitTestBehavior.translucent,
               child: Center(
-                child: Text(
-                  "Error",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
+                child: StText.normal("Error"),
               ),
             ),
           ),
         ],
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(width: double.infinity, decoration: BoxDecoration(color: Colors.grey[100], border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))), child: tabbar()),
+        Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: ColorPlate.gray,
+            border: Border(
+              bottom: BorderSide(color: ColorPlate.gray, width: 0.2),
+            ),
+          ),
+          child: tabbar,
+        ),
         Expanded(
           child: IndexedStack(
             children: [_LogListView(0), _LogListView(1), _LogListView(2)],
@@ -300,20 +320,32 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
               children: <Widget>[
                 GestureDetector(
                   onLongPress: () {
-                    Clipboard.setData(ClipboardData(text: newlogs[index].toString()));
+                    Clipboard.setData(
+                      ClipboardData(
+                        text: newlogs[index].toString(),
+                      ),
+                    );
                     showToast("Copy Success");
                   },
                   child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        if (FConsole.instance.options.showTime) Text(time(newlogs[index]) + " : ", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black54, fontSize: 16)),
+                        if (FConsole.instance.options.showTime)
+                          StText.normal(
+                            time(newlogs[index]) + " : ",
+                          ),
                         Expanded(
-                          child: Text(
+                          child: StText.normal(
                             newlogs[index].toString(),
-                            style: TextStyle(fontWeight: FontWeight.bold, color: currentIndex == 2 ? Colors.red : Colors.black54, fontSize: 16),
+                            style: TextStyle(
+                              color: currentIndex == 2
+                                  ? ColorPlate.red
+                                  : ColorPlate.darkGray,
+                            ),
                           ),
                         ),
                       ],
@@ -345,7 +377,9 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
 
   String time(Log log) {
     if (FConsole.instance.options.showTime) {
-      return DateFormat(FConsole.instance.options.timeFormat).format(log.dateTime) ?? "";
+      return DateFormat(FConsole.instance.options.timeFormat)
+              .format(log.dateTime) ??
+          "";
     }
     return "";
   }
@@ -366,7 +400,9 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
   Widget filterView() {
     return Container(
       height: 40,
-      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey, width: 0.2))),
+      decoration: BoxDecoration(
+          border:
+              Border(bottom: BorderSide(color: ColorPlate.gray, width: 0.2))),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -374,7 +410,7 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
               toolbarOptions: ToolbarOptions(),
               controller: _filterTEC,
               clearButtonMode: OverlayVisibilityMode.editing,
-              style: TextStyle(color: Colors.black, fontSize: 16),
+              style: TextStyle(color: ColorPlate.black, fontSize: 16),
               decoration: BoxDecoration(),
             ),
           ),
@@ -385,12 +421,12 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
             behavior: HitTestBehavior.translucent,
             child: Container(
               height: double.infinity,
-              color: Colors.grey[100],
+              color: ColorPlate.lightGray,
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Center(
                 child: Text(
                   "Filter",
-                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  style: TextStyle(color: ColorPlate.black, fontSize: 18),
                 ),
               ),
             ),
@@ -436,12 +472,12 @@ class _SystemInfoPannelState extends State<SystemInfoPannel> {
         _deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
       }
     } on PlatformException {
-      _deviceData = <String, dynamic>{'Error:': 'Failed to get platform version.'};
+      _deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
     }
-    if(mounted){
-      setState(() {
-
-      });
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -504,11 +540,12 @@ class _SystemInfoPannelState extends State<SystemInfoPannel> {
             Row(
               children: <Widget>[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
                   child: Text(
                     property,
                     style: const TextStyle(
-                      color: Colors.black54,
+                      color: ColorPlate.darkGray,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
