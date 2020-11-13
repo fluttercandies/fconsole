@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fconsole/fconsole.dart';
+import 'package:fconsole_example/style/color.dart';
+import 'package:fconsole_example/style/text.dart';
+import 'package:tapped/tapped.dart';
+
+import 'style/color.dart';
 
 void main() => runApp(MyApp());
 
@@ -34,42 +39,178 @@ class _MyAppState extends State<MyApp> {
     return ConsoleWidget(
       child: MaterialApp(
         home: Scaffold(
+          backgroundColor: ColorPlate.lightGray,
           appBar: AppBar(
-            title: const Text('Plugin example app'),
+            title: const Text(
+              'FConsole example app',
+            ),
           ),
-          body: Builder(
-            builder: (ctx) {
-              return FlatButton(
-                onPressed: () {
-//                  Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) {
-//                    return Scaffold(
-//                      appBar: AppBar(),
-//                    );
-//                  }));
-                  FConsole.log("asdadasd");
-                  // showToast("1213123");
-                },
+          body: ListView(
+            children: [
+              AspectRatio(
+                aspectRatio: 24 / 9,
                 child: Center(
-                  child: Text('Running on: $_platformVersion\n'),
+                  child: StText.big(
+                    'FConsole Example',
+                    style: TextStyle(color: ColorPlate.blue),
+                  ),
                 ),
-              );
-            },
-          ),
-          floatingActionButton: Builder(
-            builder: (ctx) {
-              return FlatButton(
-                onPressed: () {
-                  showConsole();
+              ),
+              SettingRow(
+                icon: consoleHasShow ? Icons.tab : Icons.tab_unselected,
+                text: consoleHasShow ? 'Console打开' : 'Console关闭',
+                right: Container(
+                  height: 36,
+                  padding: EdgeInsets.only(right: 12),
+                  child: Switch(
+                    value: consoleHasShow,
+                    onChanged: (v) {
+                      if (v) {
+                        showConsole();
+                      } else {
+                        hideConsole();
+                      }
+                      setState(() {});
+                    },
+                  ),
+                ),
+              ),
+              Container(height: 12),
+              SettingRow(
+                icon: Icons.info_outline,
+                text: '打印log',
+                right: Container(),
+                onTap: () {
+                  FConsole.log("打印了一行log");
                 },
-                child: Container(
-                  height: 50,
-                  child: Text("show console"),
-                ),
-              );
-            },
+              ),
+              SettingRow(
+                icon: Icons.warning,
+                text: '打印error',
+                right: Container(),
+                onTap: () {
+                  FConsole.error("打印了一行error");
+                },
+              ),
+            ],
           ),
+          // body: Builder(
+          //   builder: (ctx) {
+          //     return FlatButton(
+          //       onPressed: () {
+          //         FConsole.log("asdadasd");
+          //       },
+          //       child: Center(
+          //         child: Text('Running on: $_platformVersion\n'),
+          //       ),
+          //     );
+          //   },
+          // ),
+          // floatingActionButton: Builder(
+          //   builder: (ctx) {
+          //     return FlatButton(
+          //       onPressed: () {
+          //         showConsole();
+          //       },
+          //       child: Container(
+          //         height: 50,
+          //         child: Text("show console"),
+          //       ),
+          //     );
+          //   },
+          // ),
         ),
       ),
+    );
+  }
+}
+
+class SettingRow extends StatelessWidget {
+  final double padding;
+  final IconData icon;
+  final Widget right;
+  final Widget beforeRight;
+  final String text;
+  final Color textColor;
+  final Function onTap;
+  const SettingRow({
+    Key key,
+    this.padding: 14,
+    this.icon,
+    this.text,
+    this.textColor,
+    this.right,
+    this.onTap,
+    this.beforeRight,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var child = Container(
+      color: ColorPlate.white,
+      padding: EdgeInsets.only(left: 8),
+      child: Row(
+        children: <Widget>[
+          icon == null
+              ? Container()
+              : Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  child: Icon(
+                    icon,
+                    size: 20,
+                    color: textColor,
+                  ),
+                ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: padding),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: ColorPlate.lightGray),
+                ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      child: StText.normal(
+                        text ?? '--',
+                        style: TextStyle(
+                          color: textColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      beforeRight ?? Container(),
+                      Container(
+                        margin: EdgeInsets.only(left: 8),
+                        child: right ??
+                            Container(
+                              margin: EdgeInsets.only(right: 12),
+                              child: Icon(
+                                Icons.arrow_forward_ios,
+                                color: ColorPlate.gray,
+                                size: 12,
+                              ),
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    if (onTap == null) {
+      return child;
+    }
+    return Tapped(
+      onTap: onTap,
+      child: child,
     );
   }
 }

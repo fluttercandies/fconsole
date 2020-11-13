@@ -12,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:oktoast/oktoast.dart';
+import 'package:tapped/tapped.dart';
 
 part 'console_panel.dart';
 
@@ -32,7 +33,7 @@ void showConsole({BuildContext context}) {
     Widget consoleBtn = _consoleTheme.consoleBtn ?? _consoleBtn();
 
     Alignment consolePosition =
-        _consoleTheme.consolePosition ?? Alignment.centerRight;
+        _consoleTheme.consolePosition ?? Alignment(-0.8, 0.7);
 
     consoleEntry = OverlayEntry(builder: (ctx) {
       return ConsoleContainer(
@@ -47,6 +48,7 @@ void showConsole({BuildContext context}) {
 ///hide console btn
 void hideConsole({BuildContext context}) {
   if (consoleEntry != null && consoleHasShow) {
+    consoleHasShow = false;
     consoleEntry.remove();
     consoleEntry = null;
   }

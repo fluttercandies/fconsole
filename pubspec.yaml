@@ -5,17 +5,18 @@ author:
 homepage:
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.2 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  sensors: '>=0.4.2 <2.0.0'
+  sensors: ">=0.4.2 <2.0.0"
   device_info: ^0.4.2+2
   intl: ^0.16.0
   oktoast: ^2.3.2
+  tapped: any
 
 dev_dependencies:
   flutter_test:
@@ -30,7 +31,6 @@ flutter:
   # The androidPackage and pluginClass identifiers should not ordinarily
   # be modified. They are used by the tooling to maintain consistency when
   # adding or updating assets for this project.
-
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

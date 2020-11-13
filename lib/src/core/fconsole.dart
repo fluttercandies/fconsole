@@ -1,8 +1,10 @@
 import 'package:fconsole/src/core/log.dart';
+import 'package:flutter/material.dart';
 
+import 'log.dart';
 import 'shake_detector.dart';
 
-class FConsole {
+class FConsole extends ChangeNotifier {
   ConsoleOptions options = ConsoleOptions();
   ShakeDetector shakeDetector;
   static FConsole _instance;
@@ -44,38 +46,12 @@ class FConsole {
   List<Log> verboselog = [];
   int currentLogIndex = 0;
 
-  List<ConsoleLogListener> _listeners = [];
-
-  addConsoleLogListener(ConsoleLogListener l) {
-    if (!_listeners.contains(l)) {
-      _listeners.add(l);
-    }
-  }
-
-  removeConsoleLogListener(ConsoleLogListener l) {
-    if (_listeners.contains(l)) {
-      _listeners.remove(l);
-    }
-  }
-
-  notifyAddLog() {
-    for (ConsoleLogListener listener in _listeners) {
-      listener.onAddLog();
-    }
-  }
-
-  notifyClearLog() {
-    for (ConsoleLogListener listener in _listeners) {
-      listener.onClearLog();
-    }
-  }
-
   static log(dynamic log) {
     if (log != null) {
-      Log lg = Log(log);
+      Log lg = Log(log, LogType.log);
       FConsole.instance.verboselog.add(lg);
       FConsole.instance.allLog.add(lg);
-      FConsole.instance.notifyAddLog();
+      FConsole.instance.notifyListeners();
     }
   }
 
@@ -94,22 +70,28 @@ class FConsole {
 
   static error(dynamic error) {
     if (error != null) {
-      Log lg = Log(error);
+      Log lg = Log(error, LogType.error);
       FConsole.instance.errorLog.add(lg);
       FConsole.instance.allLog.add(lg);
-      FConsole.instance.notifyAddLog();
+      FConsole.instance.notifyListeners();
     }
   }
 
-  void clear() {
-    if (currentLogIndex == 0) {
+  void clear(bool clearAll) {
+    if (clearAll) {
       allLog.clear();
-    } else if (currentLogIndex == 1) {
       verboselog.clear();
-    } else if (currentLogIndex == 2) {
       errorLog.clear();
+    } else {
+      if (currentLogIndex == 0) {
+        allLog.clear();
+      } else if (currentLogIndex == 1) {
+        verboselog.clear();
+      } else if (currentLogIndex == 2) {
+        errorLog.clear();
+      }
     }
-    notifyClearLog();
+    FConsole.instance.notifyListeners();
   }
 }
 
@@ -123,12 +105,6 @@ class ConsoleOptions {
     this.timeFormat = "HH:mm:ss",
     this.displayMode = ConsoleDisplayMode.Shake,
   });
-}
-
-abstract class ConsoleLogListener {
-  void onAddLog();
-
-  void onClearLog();
 }
 
 ///How to show the console button

@@ -82,15 +82,17 @@ class _ConsolePanelState extends State<ConsolePanel> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  if (currentIndex == 0) {
-                    FConsole.instance.clear();
-                  }
+              child: Tapped(
+                onTap: () {
+                  // if (currentIndex == 0) {
+                  FConsole.instance.clear(true);
+                  // }
                 },
-                child: Center(
-                  child: StText.normal("Clear"),
+                child: Container(
+                  color: ColorPlate.clear,
+                  child: Center(
+                    child: StText.normal("Clear"),
+                  ),
                 ),
               ),
             ),
@@ -100,15 +102,17 @@ class _ConsolePanelState extends State<ConsolePanel> {
               color: ColorPlate.gray,
             ),
             Expanded(
-              child: CupertinoButton(
-                onPressed: () {
+              child: Tapped(
+                onTap: () {
                   widget.onHideTap?.call();
                 },
-                padding: EdgeInsets.zero,
-                child: Center(
-                  child: StText.normal(
-                    "Hide",
-                    style: TextStyle(color: ColorPlate.black),
+                child: Container(
+                  color: ColorPlate.clear,
+                  child: Center(
+                    child: StText.normal(
+                      "Hide",
+                      style: TextStyle(color: ColorPlate.black),
+                    ),
                   ),
                 ),
               ),
@@ -290,6 +294,20 @@ class _LogInfoPannelState extends State<LogInfoPannel>
   }
 }
 
+extension _LogColor on Log {
+  Color get color {
+    switch (this.type) {
+      case LogType.log:
+        return ColorPlate.darkGray;
+        break;
+      case LogType.error:
+        return ColorPlate.red;
+        break;
+    }
+    return ColorPlate.darkGray;
+  }
+}
+
 class _LogListView extends StatefulWidget {
   final int currentIndex;
 
@@ -299,10 +317,31 @@ class _LogListView extends StatefulWidget {
   __LogListViewState createState() => __LogListViewState();
 }
 
-class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
+class __LogListViewState extends State<_LogListView> {
   final TextEditingController _filterTEC = TextEditingController();
   List<Log> logs;
   int currentIndex;
+
+  @override
+  initState() {
+    super.initState();
+    currentIndex = widget.currentIndex;
+    logs = FConsole.instance.logs(currentIndex);
+    FConsole.instance.addListener(_didUpdateLog);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+    FConsole.instance.removeListener(_didUpdateLog);
+    _filterTEC.dispose();
+  }
+
+  _didUpdateLog() {
+    setState(() {
+      logs = FConsole.instance.logs(currentIndex);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -312,67 +351,70 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
       children: <Widget>[
         filterView(),
         Expanded(
-            child: ListView.builder(
-          itemBuilder: (ctx, index) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                GestureDetector(
-                  onLongPress: () {
-                    Clipboard.setData(
-                      ClipboardData(
-                        text: newlogs[index].toString(),
+          child: ListView.builder(
+            itemCount: newlogs.length,
+            itemBuilder: (ctx, index) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  GestureDetector(
+                    onLongPress: () {
+                      Clipboard.setData(
+                        ClipboardData(
+                          text: newlogs[index].toString(),
+                        ),
+                      );
+                      showToast("Copy Success");
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 12,
                       ),
-                    );
-                    showToast("Copy Success");
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        if (FConsole.instance.options.showTime)
-                          StText.normal(
-                            time(newlogs[index]) + " : ",
-                          ),
-                        Expanded(
-                          child: StText.normal(
-                            newlogs[index].toString(),
-                            style: TextStyle(
-                              color: currentIndex == 2
-                                  ? ColorPlate.red
-                                  : ColorPlate.darkGray,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 6,
+                              ),
+                              child: StText.normal(
+                                '${newlogs[index]}',
+                                style: TextStyle(
+                                  color: newlogs[index].color,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          if (FConsole.instance.options.showTime)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 6,
+                              ),
+                              child: StText.small(
+                                "${time(newlogs[index])}",
+                                style: TextStyle(
+                                  color: currentIndex == 2
+                                      ? ColorPlate.red
+                                      : ColorPlate.darkGray,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Divider(height: 1)
-              ],
-            );
-          },
-          itemCount: newlogs.length,
-        )),
+                  Divider(height: 1)
+                ],
+              );
+            },
+          ),
+        ),
       ],
     );
-  }
-
-  initState() {
-    super.initState();
-    currentIndex = widget.currentIndex;
-    logs = FConsole.instance.logs(currentIndex);
-    FConsole.instance.addConsoleLogListener(this);
-  }
-
-  dispose() {
-    super.dispose();
-    FConsole.instance.removeConsoleLogListener(this);
-    _filterTEC.dispose();
   }
 
   String time(Log log) {
@@ -434,18 +476,6 @@ class __LogListViewState extends State<_LogListView> with ConsoleLogListener {
         ],
       ),
     );
-  }
-
-  @override
-  void onAddLog() {
-    logs = FConsole.instance.logs(currentIndex);
-    setState(() {});
-  }
-
-  @override
-  void onClearLog() {
-    logs = FConsole.instance.logs(currentIndex);
-    setState(() {});
   }
 }
 
