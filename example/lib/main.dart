@@ -15,24 +15,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion = "";
-
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
+    FConsole.instance.isShow.addListener(() {
+      setState(() {});
     });
   }
+
+
+  bool get consoleHasShow => FConsole.instance.isShow.value;
+
+  double slideValue = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +86,40 @@ class _MyAppState extends State<MyApp> {
                 onTap: () {
                   FConsole.error("打印了一行error");
                 },
+              ),
+              Container(height: 12),
+              SettingRow(
+                icon: Icons.warning,
+                text: '打印',
+                right: Container(),
+                onTap: () {
+                  print(FlowCenter.instance.flowList);
+                },
+              ),
+              SettingRow(
+                icon: Icons.warning,
+                text: '清除',
+                right: Container(),
+                onTap: () {
+                  FlowCenter.instance.flowList.clear();
+                },
+              ),
+              SettingRow(
+                icon: Icons.info_outline,
+                text: '滑动事件Flow',
+                right: Slider(
+                  value: slideValue,
+                  onChanged: (v) {
+                    FlowLog.of(
+                      '滑动Slider',
+                      Duration(seconds: 3),
+                    ).log('Value: $v');
+                    setState(() {
+                      slideValue = v;
+                    });
+                  },
+                  // onChangeEnd: (value) => FlowLog.of('滑动Slider').end(),
+                ),
               ),
             ],
           ),

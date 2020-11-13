@@ -1,12 +1,15 @@
-import 'package:fconsole/src/core/log.dart';
+import 'package:fconsole/src/model/log.dart';
 import 'package:flutter/material.dart';
 
-import 'log.dart';
+import '../model/log.dart';
 import 'shake_detector.dart';
 
 class FConsole extends ChangeNotifier {
   ConsoleOptions options = ConsoleOptions();
   ShakeDetector shakeDetector;
+
+  ValueNotifier isShow = ValueNotifier(false);
+
   static FConsole _instance;
 
   factory FConsole() => _getInstance();

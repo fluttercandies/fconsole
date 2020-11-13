@@ -2,9 +2,10 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:ui';
 import 'package:fconsole/src/core/fconsole.dart';
-import 'package:fconsole/src/core/log.dart';
+import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
+import 'package:fconsole/src/widget/flow_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info/device_info.dart';
@@ -20,14 +21,12 @@ part 'console_container.dart';
 
 LinkedHashMap<Object, BuildContext> _contextMap = LinkedHashMap();
 
-bool consoleHasShow = false;
-
 OverlayEntry consoleEntry;
 
 ///show console btn
 void showConsole({BuildContext context}) {
-  if (!consoleHasShow) {
-    consoleHasShow = true;
+  if (!FConsole.instance.isShow.value) {
+    FConsole.instance.isShow.value = true;
     context ??= _contextMap.values.first;
     _ConsoleTheme _consoleTheme = _ConsoleTheme.of(context);
     Widget consoleBtn = _consoleTheme.consoleBtn ?? _consoleBtn();
@@ -47,8 +46,8 @@ void showConsole({BuildContext context}) {
 
 ///hide console btn
 void hideConsole({BuildContext context}) {
-  if (consoleEntry != null && consoleHasShow) {
-    consoleHasShow = false;
+  if (consoleEntry != null && FConsole.instance.isShow.value) {
+    FConsole.instance.isShow.value = false;
     consoleEntry.remove();
     consoleEntry = null;
   }

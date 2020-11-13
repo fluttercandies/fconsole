@@ -81,7 +81,7 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
 
   @override
   void dispose() {
-    consoleHasShow = false;
+    FConsole.instance.isShow.value = false;
     super.dispose();
   }
 

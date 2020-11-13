@@ -28,7 +28,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
           Container(
             width: 80,
             color: currentIndex == 0 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: 12),
             child: GestureDetector(
               onTap: () {
                 if (currentIndex != 0) {
@@ -45,15 +45,36 @@ class _ConsolePanelState extends State<ConsolePanel> {
           Container(
             width: 0.5,
             height: double.infinity,
-            color: ColorPlate.lightGray,
+            color: ColorPlate.gray.withOpacity(0.5),
           ),
           Container(
             color: currentIndex == 1 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 15),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: GestureDetector(
               onTap: () {
                 if (currentIndex != 1) {
                   currentIndex = 1;
+                  setState(() {});
+                }
+              },
+              behavior: HitTestBehavior.translucent,
+              child: Center(
+                child: StText.big("Flow"),
+              ),
+            ),
+          ),
+          Container(
+            width: 0.5,
+            height: double.infinity,
+            color: ColorPlate.gray.withOpacity(0.5),
+          ),
+          Container(
+            color: currentIndex == 2 ? ColorPlate.white : ColorPlate.clear,
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            child: GestureDetector(
+              onTap: () {
+                if (currentIndex != 2) {
+                  currentIndex = 2;
                   setState(() {});
                 }
               },
@@ -150,6 +171,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
                       index: currentIndex,
                       children: <Widget>[
                         LogInfoPannel(),
+                        FlowInfo(),
                         SystemInfoPannel(),
                       ],
                     ),
@@ -208,9 +230,8 @@ class _LogInfoPannelState extends State<LogInfoPannel>
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
-            width: 80,
             color: currentIndex == 0 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 24),
             child: GestureDetector(
               onTap: () {
                 if (currentIndex != 0) {
@@ -230,9 +251,8 @@ class _LogInfoPannelState extends State<LogInfoPannel>
             color: ColorPlate.gray,
           ),
           Container(
-            width: 80,
             color: currentIndex == 1 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 24),
             child: GestureDetector(
               onTap: () {
                 if (currentIndex != 1) {
@@ -252,9 +272,8 @@ class _LogInfoPannelState extends State<LogInfoPannel>
             color: ColorPlate.gray,
           ),
           Container(
-            width: 80,
             color: currentIndex == 2 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 24),
             child: GestureDetector(
               onTap: () {
                 if (currentIndex != 2) {
@@ -371,7 +390,7 @@ class __LogListViewState extends State<_LogListView> {
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
-                        vertical: 12,
+                        vertical: 10,
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
