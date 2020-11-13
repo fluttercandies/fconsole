@@ -47,7 +47,7 @@ class FlowLog {
   bool get isTimeout =>
       expireTime.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch;
 
-  /// 增加一个新log，如果超时了，就总结log加入已完成
+  /// 增加一个新log，如果超时了，就总结log并加入已完成
   addRawLog(Log log) {
     if (isTimeout) {
       this.end();
