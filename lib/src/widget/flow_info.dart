@@ -1,7 +1,9 @@
+import 'package:animations/animations.dart';
 import 'package:fconsole/fconsole.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
 import 'package:flutter/material.dart';
+import 'package:left_scroll_actions/left_scroll_actions.dart';
 import 'package:tapped/tapped.dart';
 
 class FlowInfo extends StatefulWidget {
@@ -11,6 +13,10 @@ class FlowInfo extends StatefulWidget {
 
 class _FlowInfoState extends State<FlowInfo> {
   int currentIndex = 0;
+
+  /// 正在查看详情列表
+  bool get isDetailPage => currentLog != null;
+  FlowLog currentLog;
   @override
   Widget build(BuildContext context) {
     var tabbar = Container(
@@ -69,32 +75,140 @@ class _FlowInfoState extends State<FlowInfo> {
         ],
       ),
     );
+    var detailPage = FlowLogDetailPage(
+      flowLog: currentLog,
+      onBack: () {
+        setState(() {
+          currentLog = null;
+        });
+      },
+    );
+    var tablePage = Column(
+      children: [
+        tabbar,
+        Expanded(
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ListView.builder(
+              reverse: true,
+              shrinkWrap: true,
+              itemCount: FlowCenter.instance.flowList.length,
+              itemBuilder: (context, index) {
+                var flowlog = FlowCenter.instance.flowList[index];
+                var desc = flowlog.desc;
+                return _Row(
+                  title: flowlog.name,
+                  desc: desc.detail,
+                  detail1: 'Start: ${flowlog.startTimeText}',
+                  detail2: 'End: ${flowlog.endTimeText}',
+                  isWarning: desc.hasError,
+                  onShare: () {
+                    // TODO: 分享
+                  },
+                  onTap: () {
+                    // flow log详情
+                    setState(() {
+                      currentLog = flowlog;
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+    return AnimatedSwither(
+      reverse: isDetailPage,
+      child: isDetailPage ? detailPage : tablePage,
+    );
+  }
+}
+
+/// 查看一个Flow log的详情
+class FlowLogDetailPage extends StatelessWidget {
+  final FlowLog flowLog;
+  final Function onBack;
+
+  const FlowLogDetailPage({
+    Key key,
+    this.flowLog,
+    this.onBack,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
-          tabbar,
-          Expanded(
-            child: PageView(
+          Container(
+            color: ColorPlate.white,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ListView.builder(
-                  itemCount: FlowCenter.instance.flowList.length,
-                  itemBuilder: (context, index) {
-                    var flowlog = FlowCenter.instance.flowList[index];
-                    return _Row(
-                      title: flowlog.id,
-                      desc: flowlog.desc,
-                      detail1: 'Start: ${flowlog.startTimeText}',
-                      detail2: 'End: ${flowlog.endTimeText}',
-                      onTap: () {
-                        // TODO: flow log详情
-                      },
-                    );
-                  },
+                _ActBtn(
+                  onTap: onBack,
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    size: 16,
+                    color: ColorPlate.darkGray,
+                  ),
                 ),
-                Center(
-                  child: StText.normal('todo'),
-                )
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                    ),
+                    child: StText.normal(flowLog.name ?? '--'),
+                  ),
+                ),
+                _ActBtn(
+                  onTap: () {
+                    // TODO: 分享
+                  },
+                  right: true,
+                  child: Icon(
+                    Icons.share,
+                    size: 16,
+                    color: ColorPlate.darkGray,
+                  ),
+                ),
               ],
+            ),
+          ),
+          Container(
+            height: .5,
+            color: ColorPlate.gray.withOpacity(0.5),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: flowLog.logs.length,
+                itemBuilder: (context, index) {
+                  var log = flowLog.logs[index];
+                  return Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: ColorPlate.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: ColorPlate.lightGray,
+                        ),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        StText.normal("${log.log}"),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -103,34 +217,82 @@ class _FlowInfoState extends State<FlowInfo> {
   }
 }
 
-// class AnimatedSwither extends StatelessWidget {
+class _ActBtn extends StatelessWidget {
+  const _ActBtn({
+    Key key,
+    @required this.onTap,
+    this.child,
+    this.right: false,
+  }) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return PageTransitionSwitcher(
-//       duration: const Duration(milliseconds: 300),
-//       reverse: inProgress,
-//       transitionBuilder: (
-//         Widget child,
-//         Animation<double> animation,
-//         Animation<double> secondaryAnimation,
-//       ) {
-//         return SharedAxisTransition(
-//           child: child,
-//           animation: animation,
-//           secondaryAnimation: secondaryAnimation,
-//           transitionType: SharedAxisTransitionType.scaled,
-//         );
-//       },
-//       child: inProgress
-//           ? _ProgressContainer(
-//               progress: progress,
-//             )
-//           : updateBtn,
-//     );
-//   }
-// }
+  final bool right;
+  final Widget child;
+  final Function onTap;
 
+  @override
+  Widget build(BuildContext context) {
+    return Tapped(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 12,
+        ),
+        decoration: BoxDecoration(
+          color: ColorPlate.white,
+          border: right
+              ? Border(
+                  left: BorderSide(
+                    color: ColorPlate.gray.withOpacity(.5),
+                    width: .5,
+                  ),
+                )
+              : Border(
+                  right: BorderSide(
+                    color: ColorPlate.gray.withOpacity(.5),
+                    width: .5,
+                  ),
+                ),
+        ),
+        child: child,
+      ),
+    );
+  }
+}
+
+class AnimatedSwither extends StatelessWidget {
+  final bool reverse;
+  final Widget child;
+
+  const AnimatedSwither({
+    Key key,
+    this.reverse,
+    this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PageTransitionSwitcher(
+      duration: const Duration(milliseconds: 300),
+      reverse: !reverse,
+      transitionBuilder: (
+        Widget child,
+        Animation<double> animation,
+        Animation<double> secondaryAnimation,
+      ) {
+        return SharedAxisTransition(
+          child: child,
+          animation: animation,
+          secondaryAnimation: secondaryAnimation,
+          transitionType: SharedAxisTransitionType.horizontal,
+        );
+      },
+      child: child,
+    );
+  }
+}
+
+/// 一行FlowLog组
 class _Row extends StatelessWidget {
   final String title;
   final String desc;
@@ -138,6 +300,7 @@ class _Row extends StatelessWidget {
   final String detail2;
   final bool isWarning;
   final Function onTap;
+  final Function onShare;
   const _Row({
     Key key,
     this.title,
@@ -146,15 +309,32 @@ class _Row extends StatelessWidget {
     this.detail2,
     this.isWarning,
     this.onTap,
+    this.onShare,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Tapped(
+    return LeftScroll(
+      key: key,
       onTap: onTap,
+      buttons: [
+        Tapped(
+          onTap: onShare,
+          child: Container(
+            color: ColorPlate.orange,
+            child: Center(
+              child: StText.normal(
+                'Share',
+                style: TextStyle(color: ColorPlate.white),
+              ),
+            ),
+          ),
+        ),
+      ],
       child: Container(
         padding: EdgeInsets.fromLTRB(8, 8, 0, 8),
         decoration: BoxDecoration(
+          color: ColorPlate.white,
           border: Border(
             bottom: BorderSide(
               width: 0.5,
@@ -166,11 +346,17 @@ class _Row extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.all(12),
-              child: Icon(
-                Icons.warning,
-                size: 18,
-                color: ColorPlate.orange,
-              ),
+              child: isWarning
+                  ? Icon(
+                      Icons.warning,
+                      size: 18,
+                      color: ColorPlate.orange,
+                    )
+                  : Icon(
+                      Icons.check_circle,
+                      size: 18,
+                      color: ColorPlate.green,
+                    ),
             ),
             Expanded(
               child: Column(
@@ -178,10 +364,10 @@ class _Row extends StatelessWidget {
                 children: [
                   Container(
                     margin: EdgeInsets.only(bottom: 2),
-                    child: StText.normal(title ?? 'Open Lock'),
+                    child: StText.normal(title ?? '??'),
                   ),
                   StText.small(
-                    desc ?? '2 Logs, 12 Warnings',
+                    desc ?? '- Logs, - Warnings',
                     style: TextStyle(
                       color: ColorPlate.darkGray,
                     ),

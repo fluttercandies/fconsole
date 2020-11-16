@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 import 'dart:ui';
+import 'package:fconsole/fconsole.dart';
 import 'package:fconsole/src/core/fconsole.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';

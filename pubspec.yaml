@@ -18,6 +18,9 @@ dependencies:
   oktoast: ^2.3.2
   tapped: ^1.0.2
   animations: 1.1.2
+  left_scroll_actions: ^1.5.2
+  share: ^0.6.5+4
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

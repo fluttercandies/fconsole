@@ -1,11 +1,25 @@
+import 'dart:async';
+
 import 'package:fconsole/fconsole.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+class FlowLogDesc {
+  final String detail;
+  final bool hasError;
+  final bool hasItem;
+
+  FlowLogDesc({
+    this.detail,
+    this.hasError,
+    this.hasItem,
+  });
+}
+
 // 一个工作流
 class FlowLog {
-  final String id;
+  final String name;
   List<Log> logs;
 
   DateTime createdAt;
@@ -17,7 +31,7 @@ class FlowLog {
   DateTime get endAt => _endAt;
 
   FlowLog._({
-    this.id,
+    this.name,
     this.logs,
     this.timeout,
     this.createdAt,
@@ -27,12 +41,12 @@ class FlowLog {
   }
 
   FlowLog({
-    this.id: "system",
+    this.name: "system",
     this.logs,
     this.timeout: const Duration(seconds: 30),
   }) : createdAt = DateTime.now() {
     logs ??= [];
-    FlowCenter.instance.workingFlow[id] = this;
+    FlowCenter.instance.workingFlow[name] = this;
   }
 
   DateTime get latestTime {
@@ -47,10 +61,18 @@ class FlowLog {
   bool get isTimeout =>
       expireTime.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch;
 
+  Timer timer;
+
   /// 增加一个新log，如果超时了，就总结log并加入已完成
-  addRawLog(Log log) {
+  _addRawLog(Log log) {
     if (isTimeout) {
       this.end();
+    } else {
+      timer?.cancel();
+      timer = Timer(timeout, () {
+        print('end from timer');
+        this.end();
+      });
     }
     this.logs.add(log);
     FlowCenter.instance._notify();
@@ -58,25 +80,28 @@ class FlowLog {
 
   /// 添加一个常规log
   log(dynamic log) {
-    this.addRawLog(Log(log, LogType.log));
+    this._addRawLog(Log(log, LogType.log));
   }
 
   /// 添加一个常规log
   add(dynamic log) {
-    this.addRawLog(Log(log, LogType.log));
+    this._addRawLog(Log(log, LogType.log));
   }
 
   /// 添加一个Error log
   error(dynamic log) {
-    this.addRawLog(Log(log, LogType.log));
+    this._addRawLog(Log(log, LogType.log));
   }
 
   /// 结束当前Flow
   end() {
+    showToast('end');
+    timer?.cancel();
+    timer = null;
     _endAt = DateTime.now();
     // 拷贝一份去
     FlowCenter.instance.flowList.add(FlowLog._(
-      id: id,
+      name: name,
       logs: List.from(logs),
       timeout: timeout,
       createdAt: createdAt,
@@ -84,12 +109,12 @@ class FlowLog {
     ));
     this.createdAt = DateTime.now();
     this._endAt = null;
-    FlowCenter.instance.workingFlow[id] = null;
+    FlowCenter.instance.workingFlow[name] = null;
     this.logs.clear();
     FlowCenter.instance._notify();
   }
 
-  String get desc {
+  FlowLogDesc get desc {
     int normalCount = 0;
     int errorCount = 0;
     for (var log in logs) {
@@ -99,7 +124,12 @@ class FlowLog {
         errorCount += 1;
       }
     }
-    return '$normalCount Logs, $errorCount Errors';
+    var detail = '$normalCount Logs, $errorCount Errors';
+    return FlowLogDesc(
+      detail: detail,
+      hasError: errorCount > 0,
+      hasItem: (errorCount + errorCount) > 0,
+    );
   }
 
   String get startTimeText =>
@@ -109,17 +139,19 @@ class FlowLog {
       DateFormat(FConsole.instance.options.timeFormat).format(endAt);
 
   /// 通过id获取一个正在进行的Flow，如果flow还没有创建，那么就创建一个新的再返回
-  static FlowLog of(String id, [Duration initTimeOut]) {
-    if (FlowCenter.instance.workingFlow[id] == null) {
-      FlowCenter.instance.workingFlow[id] =
-          FlowLog(id: id, timeout: initTimeOut);
+  static FlowLog of(String name, [Duration initTimeOut]) {
+    if (FlowCenter.instance.workingFlow[name] == null) {
+      FlowCenter.instance.workingFlow[name] = FlowLog(
+        name: name,
+        timeout: initTimeOut,
+      );
     }
-    return FlowCenter.instance.workingFlow[id];
+    return FlowCenter.instance.workingFlow[name];
   }
 
   @override
   String toString() {
-    return 'FlowLog: $id\nLog: $logs\n';
+    return 'FlowLog: $name\nLog: $logs\n';
   }
 }
 
@@ -129,6 +161,11 @@ class FlowCenter extends ChangeNotifier {
 
   /// 已经完成的流程记录
   List<FlowLog> flowList = [];
+
+  clearAll() {
+    this.flowList.clear();
+    this.workingFlow.clear();
+  }
 
   _notify() {
     notifyListeners();

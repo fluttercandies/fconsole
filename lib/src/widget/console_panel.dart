@@ -83,9 +83,13 @@ class _ConsolePanelState extends State<ConsolePanel> {
             Expanded(
               child: Tapped(
                 onTap: () {
-                  // if (currentIndex == 0) {
-                  FConsole.instance.clear(true);
-                  // }
+                  if (currentIndex == 0) {
+                    FConsole.instance.clear(true);
+                  }
+                  if (currentIndex == 1) {
+                    FlowCenter.instance.clearAll();
+                  }
+                  setState(() {});
                 },
                 child: Container(
                   color: ColorPlate.clear,
