@@ -25,64 +25,42 @@ class _ConsolePanelState extends State<ConsolePanel> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            width: 80,
-            color: currentIndex == 0 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 0) {
-                  currentIndex = 0;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.big('Log'),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 0,
+            title: 'Log',
+            onTap: () {
+              setState(() {
+                currentIndex = 0;
+              });
+            },
           ),
           Container(
             width: 0.5,
             height: double.infinity,
             color: ColorPlate.gray.withOpacity(0.5),
           ),
-          Container(
-            color: currentIndex == 1 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 1) {
-                  currentIndex = 1;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.big("Flow"),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 1,
+            title: 'Flow',
+            onTap: () {
+              setState(() {
+                currentIndex = 1;
+              });
+            },
           ),
           Container(
             width: 0.5,
             height: double.infinity,
             color: ColorPlate.gray.withOpacity(0.5),
           ),
-          Container(
-            color: currentIndex == 2 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 2) {
-                  currentIndex = 2;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.big("System"),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 2,
+            title: 'System',
+            onTap: () {
+              setState(() {
+                currentIndex = 2;
+              });
+            },
           ),
         ],
       ),
@@ -190,6 +168,46 @@ class _ConsolePanelState extends State<ConsolePanel> {
       MediaQueryData.fromWindow(window).platformBrightness == Brightness.dark;
 }
 
+/// 选项卡按钮
+class _TapBtn extends StatelessWidget {
+  final String title;
+  final double space;
+  final double minwidth;
+  final bool selected;
+  final bool small;
+  final Function onTap;
+
+  const _TapBtn({
+    Key key,
+    this.title,
+    this.space: 24,
+    this.selected: false,
+    this.onTap,
+    this.small: false,
+    this.minwidth,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(minWidth: minwidth ?? 60),
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.translucent,
+        child: Container(
+          color: selected ? ColorPlate.white : ColorPlate.clear,
+          padding: EdgeInsets.symmetric(horizontal: space),
+          child: Center(
+            child: small
+                ? StText.normal(title ?? '??')
+                : StText.big(title ?? '??'),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class LogInfoPannel extends StatefulWidget {
   @override
   _LogInfoPannelState createState() => _LogInfoPannelState();
@@ -229,63 +247,45 @@ class _LogInfoPannelState extends State<LogInfoPannel>
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            color: currentIndex == 0 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 0) {
-                  currentIndex = 0;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.normal("All"),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 0,
+            small: true,
+            title: "All",
+            onTap: () {
+              setState(() {
+                currentIndex = 0;
+              });
+            },
           ),
           Container(
             width: 0.5,
             height: double.infinity,
             color: ColorPlate.gray,
           ),
-          Container(
-            color: currentIndex == 1 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 1) {
-                  currentIndex = 1;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.normal("Log"),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 1,
+            small: true,
+            title: "Log",
+            onTap: () {
+              setState(() {
+                currentIndex = 1;
+              });
+            },
           ),
           Container(
             width: 0.5,
             height: double.infinity,
             color: ColorPlate.gray,
           ),
-          Container(
-            color: currentIndex == 2 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 2) {
-                  currentIndex = 2;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.normal("Error"),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 2,
+            small: true,
+            title: "Error",
+            onTap: () {
+              setState(() {
+                currentIndex = 2;
+              });
+            },
           ),
         ],
       ),

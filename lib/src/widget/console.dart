@@ -108,7 +108,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
 
   initState() {
     super.initState();
-    FConsole.instance.options = widget.options;
+    FConsole.instance.options = widget.options ?? ConsoleOptions();
     if (FConsole.instance.options.displayMode == ConsoleDisplayMode.Shake) {
       FConsole.instance.startShakeListener(() {
         if (mounted) {

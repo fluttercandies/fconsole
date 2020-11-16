@@ -15,7 +15,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
@@ -24,7 +23,6 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-
   bool get consoleHasShow => FConsole.instance.isShow.value;
 
   double slideValue = 0;
@@ -32,6 +30,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return ConsoleWidget(
+      options: ConsoleOptions(),
       child: MaterialApp(
         home: Scaffold(
           backgroundColor: ColorPlate.lightGray,

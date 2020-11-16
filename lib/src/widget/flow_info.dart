@@ -24,63 +24,47 @@ class _FlowInfoState extends State<FlowInfo> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Container(
-            color: currentIndex == 0 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 0) {
-                  currentIndex = 0;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.normal("All"),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 0,
+            small: true,
+            title: "All",
+            onTap: () {
+              setState(() {
+                currentIndex = 0;
+              });
+            },
           ),
           Container(
             width: 0.5,
             height: double.infinity,
             color: ColorPlate.gray,
           ),
-          Container(
-            color: currentIndex == 1 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 1) {
-                  currentIndex = 1;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.normal("Success"),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 1,
+            small: true,
+            title: "Success",
+            space: 12,
+            onTap: () {
+              setState(() {
+                currentIndex = 1;
+              });
+            },
           ),
           Container(
             width: 0.5,
             height: double.infinity,
             color: ColorPlate.gray,
           ),
-          Container(
-            color: currentIndex == 2 ? ColorPlate.white : ColorPlate.clear,
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: GestureDetector(
-              onTap: () {
-                if (currentIndex != 2) {
-                  currentIndex = 2;
-                  setState(() {});
-                }
-              },
-              behavior: HitTestBehavior.translucent,
-              child: Center(
-                child: StText.normal("Warning"),
-              ),
-            ),
+          _TapBtn(
+            selected: currentIndex == 2,
+            small: true,
+            title: "Warning",
+            space: 12,
+            onTap: () {
+              setState(() {
+                currentIndex = 2;
+              });
+            },
           ),
         ],
       ),
@@ -118,6 +102,34 @@ class _FlowInfoState extends State<FlowInfo> {
     );
   }
 }
+
+// class AnimatedSwither extends StatelessWidget {
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return PageTransitionSwitcher(
+//       duration: const Duration(milliseconds: 300),
+//       reverse: inProgress,
+//       transitionBuilder: (
+//         Widget child,
+//         Animation<double> animation,
+//         Animation<double> secondaryAnimation,
+//       ) {
+//         return SharedAxisTransition(
+//           child: child,
+//           animation: animation,
+//           secondaryAnimation: secondaryAnimation,
+//           transitionType: SharedAxisTransitionType.scaled,
+//         );
+//       },
+//       child: inProgress
+//           ? _ProgressContainer(
+//               progress: progress,
+//             )
+//           : updateBtn,
+//     );
+//   }
+// }
 
 class _Row extends StatelessWidget {
   final String title;
@@ -193,6 +205,46 @@ class _Row extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 选项卡按钮
+class _TapBtn extends StatelessWidget {
+  final String title;
+  final double space;
+  final double minwidth;
+  final bool selected;
+  final bool small;
+  final Function onTap;
+
+  const _TapBtn({
+    Key key,
+    this.title,
+    this.space: 24,
+    this.selected: false,
+    this.onTap,
+    this.small: false,
+    this.minwidth,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(minWidth: minwidth ?? 60),
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.translucent,
+        child: Container(
+          color: selected ? ColorPlate.white : ColorPlate.clear,
+          padding: EdgeInsets.symmetric(horizontal: space),
+          child: Center(
+            child: small
+                ? StText.normal(title ?? '??')
+                : StText.big(title ?? '??'),
+          ),
         ),
       ),
     );

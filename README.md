@@ -85,7 +85,7 @@ flutter packages pub publish --server=https://pub.dartlang.org
 
 ## 已知问题：
 
-- 切换的Tab点击面积比看上去小
+- ~~切换的Tab点击面积比看上去小~~
 - flowlog超时后只能在下一次添加时被记录，应该添加一个定时器记录
 - log功能代码在无需log时生效，可能影响性能，log部分功能最好不要被打包进正式版
 
