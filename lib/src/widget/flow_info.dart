@@ -203,7 +203,10 @@ class FlowLogDetailPage extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        StText.normal("${log.log}"),
+                        Expanded(
+                          child: StText.normal("${log.log}"),
+                        ),
+                        // TODO: log
                       ],
                     ),
                   );
