@@ -75,8 +75,16 @@ hideConsolePanel() {
 }
 
 class ConsoleWidget extends StatefulWidget {
+  /// 子组件，通常为App层
   final Widget child;
+
+  /// 悬浮按钮组件
   final Widget consoleBtn;
+
+  /// 悬浮按钮配置
+  final ConsoleOptions options;
+
+  /// 默认初始化位置
   final Alignment consolePosition;
 
   ConsoleWidget({
@@ -84,6 +92,7 @@ class ConsoleWidget extends StatefulWidget {
     @required this.child,
     this.consolePosition,
     this.consoleBtn,
+    this.options,
   }) : super(key: key);
 
   @override
@@ -99,6 +108,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
 
   initState() {
     super.initState();
+    FConsole.instance.options = widget.options;
     if (FConsole.instance.options.displayMode == ConsoleDisplayMode.Shake) {
       FConsole.instance.startShakeListener(() {
         if (mounted) {

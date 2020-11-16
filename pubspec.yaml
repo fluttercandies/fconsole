@@ -1,8 +1,8 @@
 name: fconsole
 description: 一个用于调试的面板组件
-version: 0.0.2
-author:
-homepage:
+version: 0.0.2+1
+author: mjl0602@gmail.com
+homepage: https://github.com/fluttercandies/fconsole
 
 environment:
   sdk: ">=2.6.2 <3.0.0"
@@ -16,7 +16,7 @@ dependencies:
   device_info: ^0.4.2+2
   intl: ^0.16.0
   oktoast: ^2.3.2
-  tapped: any
+  tapped: ^1.0.2
 
 dev_dependencies:
   flutter_test:

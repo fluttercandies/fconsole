@@ -57,7 +57,7 @@ FConsole.error("打印了一行error");
 
 然后就可以在FConsole内查看log记录。
 
-### 创建FlowLog
+### 创建FlowLog(未完成)
 
 可以使用`FlowLog`的形式记录Log:
 
@@ -76,3 +76,21 @@ FlowLog.of('分享启动').end();
 FlowLog可以记录用户的一系列行为，在用户出现问题时，通过Console截图即可快速定位问题。
 
 FlowLog的优势在于，在同一页面上的操作可以分开记录，不会互相干扰，例如同时处理两张图片，一张成功而另一张失败，会按id形成两个不同的FlowLog。
+
+## 上传包
+
+```bash
+flutter packages pub publish --server=https://pub.dartlang.org
+```
+
+## 已知问题：
+
+- 切换的Tab点击面积比看上去小
+- flowlog超时后只能在下一次添加时被记录，应该添加一个定时器记录
+- log功能代码在无需log时生效，可能影响性能，log部分功能最好不要被打包进正式版
+
+## 待完成
+- flowlog的详情页
+- 导出并分享log
+- 增加设置以避免正式线上版出现悬浮窗
+
