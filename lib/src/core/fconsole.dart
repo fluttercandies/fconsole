@@ -25,10 +25,6 @@ class FConsole extends ChangeNotifier {
 
   FConsole._();
 
-  // void start({ConsoleOptions options}) {
-  //   this.options = options ?? ConsoleOptions();
-  // }
-
   void startShakeListener(Function() onShake) {
     stopShakeListener();
     shakeDetector = ShakeDetector.autoStart(onPhoneShake: () {

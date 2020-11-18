@@ -90,7 +90,7 @@ flutter packages pub publish --server=https://pub.dartlang.org
 - log功能代码在无需log时生效，可能影响性能，log部分功能最好不要被打包进正式版
 
 ## 待完成
-- flowlog的详情页
+- ~~flowlog的详情页~~
 - 导出并分享log
 - 增加设置以避免正式线上版出现悬浮窗
 

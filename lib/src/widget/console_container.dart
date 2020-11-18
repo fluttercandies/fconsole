@@ -40,10 +40,9 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
   double childWidth = 0;
   double childHeight = 0;
 
+  ///是否要计算大小
   bool isCalculateSize = true;
   bool isShowConsoleBtn = true;
-
-  ///是否要计算大小
 
   @override
   void initState() {

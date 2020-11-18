@@ -125,6 +125,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
   }
 
   Widget build(BuildContext context) {
+    /// TODO: i18n功能存疑
     return Localizations(
       locale: Locale("zh"),
       delegates: [
@@ -133,6 +134,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
         GlobalWidgetsLocalizations.delegate,
       ],
       child: MediaQuery(
+        /// TODO: 功能存疑
         data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
         child: Material(
           child: OKToast(
@@ -158,6 +160,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
   }
 }
 
+/// TODO: 功能存疑
 class _ConsoleTheme extends InheritedWidget {
   final Widget consoleBtn;
   final Widget child;
