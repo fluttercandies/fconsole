@@ -1,8 +1,32 @@
+import 'dart:async';
+
 import 'package:fconsole/src/model/log.dart';
 import 'package:flutter/material.dart';
 
 import '../model/log.dart';
 import 'shake_detector.dart';
+
+// TODO: 拦截的log需不需要显示在其他地方?
+void runFConsoleApp(Widget app) {
+  FlutterError.onError = (details) {
+    Zone.current.handleUncaughtError(details.exception, details.stack);
+  };
+
+  var zoneSpecification = ZoneSpecification(
+    print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+      FConsole.log(line);
+    },
+    handleUncaughtError: (Zone self, ZoneDelegate parent, Zone zone,
+        Object error, StackTrace stackTrace) {
+      // TODO: 堆栈可处理
+      FConsole.error(error);
+    },
+  );
+  runZoned(
+    () => runApp(app),
+    zoneSpecification: zoneSpecification,
+  );
+}
 
 class FConsole extends ChangeNotifier {
   ConsoleOptions options = ConsoleOptions();

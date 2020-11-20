@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:fconsole/fconsole.dart';
 import 'package:fconsole_example/style/color.dart';
 import 'package:fconsole_example/style/text.dart';
@@ -7,7 +6,7 @@ import 'package:tapped/tapped.dart';
 
 import 'style/color.dart';
 
-void main() => runApp(MyApp());
+void main() => runFConsoleApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
@@ -89,20 +88,21 @@ class _MyAppState extends State<MyApp> {
               Container(height: 12),
               SettingRow(
                 icon: Icons.warning,
-                text: '打印',
+                text: '原生Print',
                 right: Container(),
                 onTap: () {
-                  print(FlowCenter.instance.flowList);
+                  print('${DateTime.now().toIso8601String()}');
                 },
               ),
               SettingRow(
                 icon: Icons.warning,
-                text: '清除',
+                text: '原生Throw',
                 right: Container(),
                 onTap: () {
-                  FlowCenter.instance.flowList.clear();
+                  throw '${DateTime.now().toIso8601String()}';
                 },
               ),
+              Container(height: 12),
               SettingRow(
                 icon: Icons.info_outline,
                 text: '滑动事件Flow',

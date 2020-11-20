@@ -22,12 +22,23 @@ TODO: 上线后补全
 
 ```dart
 ConsoleWidget(
-      child: MaterialApp(
-        home: Scaffold(),
-      )
-  )
+  child: MaterialApp(
+    home: Scaffold(),
+  ),
+)
 ```
 然后才可以使用下列方法：
+
+### 拦截原生print函数和未捕获的异常
+
+`fconsole`可以拦截原先的`print`函数，包括其他库中的`print`语句和未捕获的`throw`同样可以被拦截。
+
+要使用此功能，请将`runApp`替换为`runFConsoleApp`:
+
+```dart
+// TODO: 此功能可能需要可配置的参数
+void main() => runFConsoleApp(MyApp());
+```
 
 ### 启动悬浮窗
 
@@ -86,7 +97,7 @@ flutter packages pub publish --server=https://pub.dartlang.org
 ## 已知问题：
 
 - ~~切换的Tab点击面积比看上去小~~
-- flowlog超时后只能在下一次添加时被记录，应该添加一个定时器记录
+- ~~flowlog超时后只能在下一次添加时被记录，应该添加一个定时器记录~~
 - log功能代码在无需log时生效，可能影响性能，log部分功能最好不要被打包进正式版
 
 ## 待完成
