@@ -50,6 +50,29 @@ hideConsole();
 void main() => runFConsoleApp(MyApp());
 ```
 
+然后，原生`print`和`throw`将被拦截:
+
+```dart
+// 具体代码见example
+SettingRow(
+  icon: Icons.warning,
+  text: '原生Print',
+  right: Container(),
+  onTap: () {
+    print('${DateTime.now().toIso8601String()}');
+  },
+),
+SettingRow(
+  icon: Icons.warning,
+  text: '原生Throw',
+  right: Container(),
+  onTap: () {
+    throw '${DateTime.now().toIso8601String()}';
+  },
+),
+```
+
+
 ### 添加log
 使用FConsole添加log非常简单：
 
