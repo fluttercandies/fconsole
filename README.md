@@ -29,6 +29,17 @@ ConsoleWidget(
 ```
 然后才可以使用下列方法：
 
+### 启动悬浮窗
+
+只需要调用顶层方法就可以打开悬浮窗
+
+```dart
+// 启动悬浮窗
+showConsole();
+// 隐藏悬浮窗
+hideConsole();
+```
+
 ### 拦截原生print函数和未捕获的异常
 
 `fconsole`可以拦截原先的`print`函数，包括其他库中的`print`语句和未捕获的`throw`同样可以被拦截。
@@ -40,16 +51,6 @@ ConsoleWidget(
 void main() => runFConsoleApp(MyApp());
 ```
 
-### 启动悬浮窗
-
-只需要调用顶层方法就可以打开悬浮窗
-
-```dart
-// 启动悬浮窗
-showConsole();
-// 隐藏悬浮窗
-hideConsole();
-```
 
 ### 添加log
 使用FConsole添加log非常简单：
