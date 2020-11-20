@@ -47,10 +47,8 @@ hideConsole();
 要使用此功能，请将`runApp`替换为`runFConsoleApp`:
 
 ```dart
-// TODO: 此功能可能需要可配置的参数
 void main() => runFConsoleApp(MyApp());
 ```
-
 
 ### 添加log
 使用FConsole添加log非常简单：
