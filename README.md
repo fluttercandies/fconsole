@@ -44,6 +44,8 @@ hideConsole();
 
 `fconsole`可以拦截原先的`print`函数，包括其他库中的`print`语句和未捕获的`throw`同样可以被拦截。
 
+拦截后，`print`将等效于`FConsole.log`，未捕获的错误将等效于`FConsole.error`。
+
 要使用此功能，请将`runApp`替换为`runFConsoleApp`:
 
 ```dart
