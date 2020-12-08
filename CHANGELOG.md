@@ -1,3 +1,11 @@
+## 0.1.0+1
+
+* Add share function.
+* Add console.log function.
+* Fix runFConsoleApp print bug.
+* Fix print log bug.
+* Fix log error bug.
+
 ## 0.0.4+1
 
 * Add `runFConsoleApp` func.

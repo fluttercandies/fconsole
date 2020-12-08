@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                 text: '打印log',
                 right: Container(),
                 onTap: () {
-                  FConsole.log("打印了一行log");
+                  console.log('打印信息:', DateTime.now());
                 },
               ),
               SettingRow(
@@ -82,12 +82,12 @@ class _MyAppState extends State<MyApp> {
                 text: '打印error',
                 right: Container(),
                 onTap: () {
-                  FConsole.error("打印了一行error");
+                  console.error('打印Error:', DateTime.now());
                 },
               ),
               Container(height: 12),
               SettingRow(
-                icon: Icons.warning,
+                icon: Icons.edit,
                 text: '原生Print',
                 right: Container(),
                 onTap: () {
@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               SettingRow(
-                icon: Icons.warning,
+                icon: Icons.edit,
                 text: '原生Throw',
                 right: Container(),
                 onTap: () {
@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> {
                   onChanged: (v) {
                     FlowLog.of(
                       '滑动Slider',
-                      Duration(seconds: 3),
+                      Duration(seconds:5),
                     ).log('Value: $v');
                     setState(() {
                       slideValue = v;

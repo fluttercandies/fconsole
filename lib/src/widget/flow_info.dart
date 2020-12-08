@@ -4,6 +4,7 @@ import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
 import 'package:flutter/material.dart';
 import 'package:left_scroll_actions/left_scroll_actions.dart';
+import 'package:share/share.dart';
 import 'package:tapped/tapped.dart';
 
 class FlowInfo extends StatefulWidget {
@@ -17,6 +18,33 @@ class _FlowInfoState extends State<FlowInfo> {
   /// 正在查看详情列表
   bool get isDetailPage => currentLog != null;
   FlowLog currentLog;
+
+  List<FlowLog> get currentList {
+    if (currentIndex == 0) {
+      return FlowCenter.instance.flowList;
+    }
+    if (currentIndex == 1) {
+      return FlowCenter.instance.workingFlow.values.toList();
+    }
+    return [];
+  }
+
+  @override
+  initState() {
+    super.initState();
+    FlowCenter.instance.addListener(_didUpdateLog);
+  }
+
+  @override
+  dispose() {
+    FlowCenter.instance.removeListener(_didUpdateLog);
+    super.dispose();
+  }
+
+  _didUpdateLog() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     var tabbar = Container(
@@ -33,7 +61,7 @@ class _FlowInfoState extends State<FlowInfo> {
           _TapBtn(
             selected: currentIndex == 0,
             small: true,
-            title: "All",
+            title: "Done",
             onTap: () {
               setState(() {
                 currentIndex = 0;
@@ -48,27 +76,11 @@ class _FlowInfoState extends State<FlowInfo> {
           _TapBtn(
             selected: currentIndex == 1,
             small: true,
-            title: "Success",
+            title: "Processing",
             space: 12,
             onTap: () {
               setState(() {
                 currentIndex = 1;
-              });
-            },
-          ),
-          Container(
-            width: 0.5,
-            height: double.infinity,
-            color: ColorPlate.gray,
-          ),
-          _TapBtn(
-            selected: currentIndex == 2,
-            small: true,
-            title: "Warning",
-            space: 12,
-            onTap: () {
-              setState(() {
-                currentIndex = 2;
               });
             },
           ),
@@ -83,6 +95,7 @@ class _FlowInfoState extends State<FlowInfo> {
         });
       },
     );
+
     var tablePage = Column(
       children: [
         tabbar,
@@ -92,9 +105,9 @@ class _FlowInfoState extends State<FlowInfo> {
             child: ListView.builder(
               reverse: true,
               shrinkWrap: true,
-              itemCount: FlowCenter.instance.flowList.length,
+              itemCount: currentList.length,
               itemBuilder: (context, index) {
-                var flowlog = FlowCenter.instance.flowList[index];
+                var flowlog = currentList[index];
                 var desc = flowlog.desc;
                 return _Row(
                   title: flowlog.name,
@@ -103,7 +116,7 @@ class _FlowInfoState extends State<FlowInfo> {
                   detail2: 'End: ${flowlog.endTimeText}',
                   isWarning: desc.hasError,
                   onShare: () {
-                    // TODO: 分享
+                    Share.share(flowlog.shareText);
                   },
                   onTap: () {
                     // flow log详情
@@ -164,7 +177,7 @@ class FlowLogDetailPage extends StatelessWidget {
                 ),
                 _ActBtn(
                   onTap: () {
-                    // TODO: 分享
+                    Share.share(flowLog.shareText);
                   },
                   right: true,
                   child: Icon(
@@ -206,7 +219,6 @@ class FlowLogDetailPage extends StatelessWidget {
                         Expanded(
                           child: StText.normal("${log.log}"),
                         ),
-                        // TODO: log
                       ],
                     ),
                   );
@@ -302,6 +314,7 @@ class _Row extends StatelessWidget {
   final String detail1;
   final String detail2;
   final bool isWarning;
+  final bool isProcessing;
   final Function onTap;
   final Function onShare;
   const _Row({
@@ -310,10 +323,33 @@ class _Row extends StatelessWidget {
     this.desc,
     this.detail1,
     this.detail2,
-    this.isWarning,
+    this.isWarning: false,
+    this.isProcessing: false,
     this.onTap,
     this.onShare,
   }) : super(key: key);
+
+  Icon get icon {
+    if (isWarning) {
+      return Icon(
+        Icons.warning,
+        size: 18,
+        color: ColorPlate.red,
+      );
+    }
+    if (isProcessing) {
+      return Icon(
+        Icons.schedule,
+        size: 18,
+        color: ColorPlate.orange,
+      );
+    }
+    return Icon(
+      Icons.check_circle,
+      size: 18,
+      color: ColorPlate.green,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -349,17 +385,7 @@ class _Row extends StatelessWidget {
           children: [
             Container(
               padding: EdgeInsets.all(12),
-              child: isWarning
-                  ? Icon(
-                      Icons.warning,
-                      size: 18,
-                      color: ColorPlate.orange,
-                    )
-                  : Icon(
-                      Icons.check_circle,
-                      size: 18,
-                      color: ColorPlate.green,
-                    ),
+              child: icon,
             ),
             Expanded(
               child: Column(

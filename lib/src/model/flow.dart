@@ -15,6 +15,11 @@ class FlowLogDesc {
     this.hasError,
     this.hasItem,
   });
+
+  @override
+  String toString() {
+    return detail;
+  }
 }
 
 // 一个工作流
@@ -70,7 +75,6 @@ class FlowLog {
     } else {
       timer?.cancel();
       timer = Timer(timeout, () {
-        print('end from timer');
         this.end();
       });
     }
@@ -109,7 +113,7 @@ class FlowLog {
     ));
     this.createdAt = DateTime.now();
     this._endAt = null;
-    FlowCenter.instance.workingFlow[name] = null;
+    FlowCenter.instance.workingFlow.remove(name);
     this.logs.clear();
     FlowCenter.instance._notify();
   }
@@ -135,8 +139,15 @@ class FlowLog {
   String get startTimeText =>
       DateFormat(FConsole.instance.options.timeFormat).format(createdAt);
 
-  String get endTimeText =>
-      DateFormat(FConsole.instance.options.timeFormat).format(endAt);
+  String get endTimeText => endAt == null
+      ? 'null'
+      : DateFormat(FConsole.instance.options.timeFormat).format(endAt);
+
+  String get shareText => [
+        "$name",
+        "$desc",
+        logs.join('\n'),
+      ].join('\n');
 
   /// 通过id获取一个正在进行的Flow，如果flow还没有创建，那么就创建一个新的再返回
   static FlowLog of(String name, [Duration initTimeOut]) {

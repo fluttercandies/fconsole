@@ -1,6 +1,6 @@
 name: fconsole
-description: 一个用于调试的面板组件
-version: 0.0.4+1
+description: A overlay console log list like v-console.
+version: 0.1.0+1
 author: mjl0602@gmail.com
 homepage: https://github.com/fluttercandies/fconsole
 

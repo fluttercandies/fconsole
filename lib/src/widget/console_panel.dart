@@ -349,7 +349,7 @@ class __LogListViewState extends State<_LogListView> {
   initState() {
     super.initState();
     currentIndex = widget.currentIndex;
-    logs = FConsole.instance.logs(currentIndex);
+    logs = FConsole.instance.logListOfType(currentIndex);
     FConsole.instance.addListener(_didUpdateLog);
   }
 
@@ -362,7 +362,7 @@ class __LogListViewState extends State<_LogListView> {
 
   _didUpdateLog() {
     setState(() {
-      logs = FConsole.instance.logs(currentIndex);
+      logs = FConsole.instance.logListOfType(currentIndex);
     });
   }
 
