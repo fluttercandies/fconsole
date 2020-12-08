@@ -2,19 +2,11 @@
 
 一个用于调试的面板组件，类似微信小程序的v-console：在页面上创建一个可拖拽的悬浮窗，点击悬浮窗可启用log列表面板。
 
-## 意外情况
-
-因为我的Mac mini坏了需要送修，直到1月份，开发进度可能较慢。
-
-> 苹果💊
 
 ## 开发中
 
 此组件仍在开发中，无法提供稳定的使用体验
 
-## 安装
-
-TODO: 上线后补全
 
 ## 使用
 
@@ -108,7 +100,17 @@ FlowLog.of('分享启动').log('获取到分享值4 $shareId');
 FlowLog.of('分享启动').error('查询分享信息4错误: $map');
 FlowLog.of('分享启动').end();
 ```
-FlowLog可以记录用户的一系列行为，在用户出现问题时，通过Console截图即可快速定位问题。
+
+也可以使用变量来记录
+
+```dart
+var logger = FlowLog.of('分享启动');
+logger.log('用户进入页面 $id');
+logger.log('获取到分享值 $shareId');
+logger.error('查询分享信息错误: $map');
+logger.end();
+```
+FlowLog可以记录用户的一系列行为，在用户出现问题时，通过Console信息即可快速定位问题。
 
 FlowLog的优势在于，在同一页面上的操作可以分开记录，不会互相干扰，例如同时处理两张图片，一张成功而另一张失败，会按id形成两个不同的FlowLog。
 
@@ -122,10 +124,9 @@ flutter packages pub publish --server=https://pub.dartlang.org
 
 - ~~切换的Tab点击面积比看上去小~~
 - ~~flowlog超时后只能在下一次添加时被记录，应该添加一个定时器记录~~
-- log功能代码在无需log时生效，可能影响性能，log部分功能最好不要被打包进正式版
+- ~~log功能代码在无需log时生效~~，可能影响性能，log部分功能最好不要被打包进正式版
 
 ## 待完成
 - ~~flowlog的详情页~~
-- 导出并分享log
-- 增加设置以避免正式线上版出现悬浮窗
+- ~~导出并分享log~~
 
