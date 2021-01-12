@@ -1,7 +1,8 @@
 name: fconsole
 description: A overlay console log list like v-console.
-version: 0.1.0+1
+version: 0.1.1+1
 homepage: https://github.com/fluttercandies/fconsole
+publish_to: https://pub.dartlang.org
 
 environment:
   sdk: ">=2.6.2 <3.0.0"

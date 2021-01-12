@@ -1,3 +1,7 @@
+## 0.1.1+1
+
+* Fix bug.
+* Change log list to reversed list.
 ## 0.1.0+1
 
 * Add share function.

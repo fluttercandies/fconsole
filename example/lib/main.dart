@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fconsole/fconsole.dart';
-import 'package:fconsole_example/style/color.dart';
-import 'package:fconsole_example/style/text.dart';
+import './style/color.dart';
+import './style/text.dart';
 import 'package:tapped/tapped.dart';
 
 import 'style/color.dart';

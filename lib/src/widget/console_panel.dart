@@ -376,6 +376,7 @@ class __LogListViewState extends State<_LogListView> {
         Expanded(
           child: ListView.builder(
             itemCount: newlogs.length,
+            reverse: true,
             itemBuilder: (ctx, index) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -406,6 +407,7 @@ class __LogListViewState extends State<_LogListView> {
                               ),
                               child: StText.normal(
                                 '${newlogs[index]}',
+                                maxLines: 10,
                                 style: TextStyle(
                                   color: newlogs[index].color,
                                 ),
@@ -459,7 +461,7 @@ class __LogListViewState extends State<_LogListView> {
           return log.toString().contains(filter);
         });
     }
-    return newlogs;
+    return newlogs.reversed.toList();
   }
 
   Widget filterView() {
