@@ -201,6 +201,12 @@ class FlowLogDetailPage extends StatelessWidget {
                 itemCount: flowLog.logs.length,
                 itemBuilder: (context, index) {
                   var log = flowLog.logs[index];
+                  var startTime = flowLog
+                      .logs[(index - 1).clamp(
+                    0,
+                    9999,
+                  )]
+                      .dateTime;
                   return Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16,
@@ -219,6 +225,8 @@ class FlowLogDetailPage extends StatelessWidget {
                         Expanded(
                           child: StText.normal("${log.log}"),
                         ),
+                        StText.normal(
+                            "+${log.dateTime.difference(startTime).inMilliseconds}ms"),
                       ],
                     ),
                   );

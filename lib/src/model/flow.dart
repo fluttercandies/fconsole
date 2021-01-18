@@ -94,7 +94,7 @@ class FlowLog {
 
   /// 添加一个Error log
   error(dynamic log) {
-    this._addRawLog(Log(log, LogType.log));
+    this._addRawLog(Log(log, LogType.error));
   }
 
   /// 结束当前Flow
@@ -132,8 +132,12 @@ class FlowLog {
       }
     }
     var detail = '$normalCount Logs, $errorCount Errors';
+    var duration = '';
+    if (endAt != null) {
+      duration = ", ${createdAt.difference(endAt).inMilliseconds * -1}ms";
+    }
     return FlowLogDesc(
-      detail: detail,
+      detail: detail + duration,
       hasError: errorCount > 0,
       hasItem: (errorCount + errorCount) > 0,
     );

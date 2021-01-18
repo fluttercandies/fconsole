@@ -1,3 +1,6 @@
+## 0.1.2+1
+* Fix bug.
+* Add duration of flowlog.
 ## 0.1.1+1
 
 * Fix bug.

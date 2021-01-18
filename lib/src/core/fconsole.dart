@@ -35,7 +35,7 @@ void runFConsoleApp(Widget app, {ErrHandler errHandler}) {
     ) {
       // TODO: 堆栈错误可处理
       FConsole.error(error, noPrint: true);
-      Zone.current.parent?.print(error);
+      Zone.current.parent?.print('$error');
       errHandler?.call(self, parent, zone, error, stackTrace);
     },
   );
