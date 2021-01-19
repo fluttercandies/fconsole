@@ -21,10 +21,10 @@ class _FlowInfoState extends State<FlowInfo> {
 
   List<FlowLog> get currentList {
     if (currentIndex == 0) {
-      return FlowCenter.instance.flowList;
+      return FlowCenter.instance.flowList.reversed.toList();
     }
     if (currentIndex == 1) {
-      return FlowCenter.instance.workingFlow.values.toList();
+      return FlowCenter.instance.workingFlow.values.toList().reversed.toList();
     }
     return [];
   }
@@ -100,33 +100,28 @@ class _FlowInfoState extends State<FlowInfo> {
       children: [
         tabbar,
         Expanded(
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: ListView.builder(
-              reverse: true,
-              shrinkWrap: true,
-              itemCount: currentList.length,
-              itemBuilder: (context, index) {
-                var flowlog = currentList[index];
-                var desc = flowlog.desc;
-                return _Row(
-                  title: flowlog.name,
-                  desc: desc.detail,
-                  detail1: 'Start: ${flowlog.startTimeText}',
-                  detail2: 'End: ${flowlog.endTimeText}',
-                  isWarning: desc.hasError,
-                  onShare: () {
-                    Share.share(flowlog.shareText);
-                  },
-                  onTap: () {
-                    // flow log详情
-                    setState(() {
-                      currentLog = flowlog;
-                    });
-                  },
-                );
-              },
-            ),
+          child: ListView.builder(
+            itemCount: currentList.length,
+            itemBuilder: (context, index) {
+              var flowlog = currentList[index];
+              var desc = flowlog.desc;
+              return _Row(
+                title: flowlog.name,
+                desc: desc.detail,
+                detail1: 'Start: ${flowlog.startTimeText}',
+                detail2: 'End: ${flowlog.endTimeText}',
+                isWarning: desc.hasError,
+                onShare: () {
+                  Share.share(flowlog.shareText);
+                },
+                onTap: () {
+                  // flow log详情
+                  setState(() {
+                    currentLog = flowlog;
+                  });
+                },
+              );
+            },
           ),
         ),
       ],
@@ -200,11 +195,12 @@ class FlowLogDetailPage extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: flowLog.logs.length,
                 itemBuilder: (context, index) {
-                  var log = flowLog.logs[index];
-                  var startTime = flowLog
-                      .logs[(index - 1).clamp(
+                  var l = flowLog.logs;
+                  var log = l[index];
+                  var endTime = flowLog
+                      .logs[(index + 1).clamp(
                     0,
-                    9999,
+                    l.length - 1,
                   )]
                       .dateTime;
                   return Container(
@@ -226,7 +222,7 @@ class FlowLogDetailPage extends StatelessWidget {
                           child: StText.normal("${log.log}"),
                         ),
                         StText.normal(
-                            "+${log.dateTime.difference(startTime).inMilliseconds}ms"),
+                            "+${endTime.difference(log.dateTime).inMilliseconds}ms"),
                       ],
                     ),
                   );
