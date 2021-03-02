@@ -1,3 +1,5 @@
+## 0.1.2+2
+* Update device_info to 1.0.0.
 ## 0.1.2+1
 * Fix bug.
 * Add duration of flowlog.
