@@ -102,7 +102,7 @@ class StText extends StatelessWidget {
         style: defaultStyle,
         child: Text(
           finalText,
-          maxLines: maxLines ?? 5,
+          maxLines: maxLines ?? 25,
           style: style,
         ),
       ),

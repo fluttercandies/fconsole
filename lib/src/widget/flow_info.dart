@@ -198,7 +198,7 @@ class FlowLogDetailPage extends StatelessWidget {
                   var l = flowLog.logs;
                   var log = l[index];
                   var endTime = flowLog
-                      .logs[(index + 1).clamp(
+                      .logs[(index - 1).clamp(
                     0,
                     l.length - 1,
                   )]
@@ -222,7 +222,7 @@ class FlowLogDetailPage extends StatelessWidget {
                           child: StText.normal("${log.log}"),
                         ),
                         StText.normal(
-                            "+${endTime.difference(log.dateTime).inMilliseconds}ms"),
+                            "+${endTime.difference(log.dateTime).inMilliseconds.abs()}ms"),
                       ],
                     ),
                   );

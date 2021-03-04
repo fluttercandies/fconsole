@@ -48,8 +48,9 @@ class FlowLog {
   FlowLog({
     this.name: "system",
     this.logs,
-    this.timeout: const Duration(seconds: 30),
-  }) : createdAt = DateTime.now() {
+    Duration timeout: const Duration(seconds: 30),
+  })  : createdAt = DateTime.now(),
+        this.timeout = timeout ?? const Duration(seconds: 30) {
     logs ??= [];
     FlowCenter.instance.workingFlow[name] = this;
   }
@@ -61,7 +62,8 @@ class FlowLog {
     return logs.last.dateTime;
   }
 
-  DateTime get expireTime => latestTime.add(timeout);
+  DateTime get expireTime =>
+      latestTime.add(timeout ?? const Duration(seconds: 30));
 
   bool get isTimeout =>
       expireTime.millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch;
