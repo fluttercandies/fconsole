@@ -111,7 +111,7 @@ class _MyAppState extends State<MyApp> {
                   onChanged: (v) {
                     FlowLog.of(
                       '滑动Slider',
-                      Duration(seconds:5),
+                      Duration(seconds: 2),
                     ).log('Value: $v');
                     setState(() {
                       slideValue = v;

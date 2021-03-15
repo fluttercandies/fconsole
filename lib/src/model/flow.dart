@@ -73,11 +73,20 @@ class FlowLog {
   /// 增加一个新log，如果超时了，就总结log并加入已完成
   _addRawLog(Log log) {
     if (isTimeout) {
-      this.end();
+      this.end(
+        'End with timeout(${timeout.inSeconds}s)',
+        LogType.error,
+      );
     } else {
       timer?.cancel();
+      timer = null;
       timer = Timer(timeout, () {
-        this.end();
+        this.end(
+          'End with timeout(${timeout.inSeconds}s)',
+          LogType.error,
+        );
+        timer?.cancel();
+        timer = null;
       });
     }
     this.logs.add(log);
@@ -100,10 +109,11 @@ class FlowLog {
   }
 
   /// 结束当前Flow
-  end([dynamic log]) {
-    if (log != null) {
-      this._addRawLog(Log(log, LogType.log));
-    }
+  end([dynamic log, LogType type]) {
+    this.logs.add(Log(log, type));
+    // if (log != null) {
+    //   this._addRawLog(Log(log, type ?? LogType.log));
+    // }
     // showToast('end');
     timer?.cancel();
     timer = null;
@@ -153,10 +163,28 @@ class FlowLog {
       : DateFormat(FConsole.instance.options.timeFormat).format(endAt);
 
   String get shareText => [
-        "$name",
-        "$desc",
-        logs.join('\n'),
+        if (logs.isNotEmpty) "Time: ${logs.first.dateTime}",
+        "Event: $name",
+        "Overview: $desc",
+        "-----------------",
+        logsDesc,
+        "-------EOF-------",
       ].join('\n');
+
+  String get logsDesc {
+    List<String> logStr = [];
+    for (var i = 0; i < logs.length; i++) {
+      var log = logs[i];
+      if (i == 0) {
+        logStr.add('[start]$log');
+        continue;
+      }
+      var lastLog = logs[i - 1];
+      var diff = log.dateTime.difference(lastLog.dateTime).inMilliseconds;
+      logStr.add('[${diff}ms]$log');
+    }
+    return logStr.join('\n');
+  }
 
   /// 通过id获取一个正在进行的Flow，如果flow还没有创建，那么就创建一个新的再返回
   static FlowLog of(String name, [Duration initTimeOut]) {

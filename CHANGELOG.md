@@ -1,3 +1,7 @@
+## 0.2.0+4
+* Add time info to share text.
+* Error flowLog show with red text.
+* Fix stack overflow bug of flowLog.
 ## 0.1.2+2
 * Update device_info to 1.0.0.
 ## 0.1.2+1

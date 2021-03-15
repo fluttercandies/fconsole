@@ -7,7 +7,6 @@
 
 此组件仍在开发中，无法提供稳定的使用体验
 
-
 ## 使用
 
 你需要将`ConsoleWidget`嵌套在`MaterialApp`外
@@ -113,20 +112,4 @@ logger.end();
 FlowLog可以记录用户的一系列行为，在用户出现问题时，通过Console信息即可快速定位问题。
 
 FlowLog的优势在于，在同一页面上的操作可以分开记录，不会互相干扰，例如同时处理两张图片，一张成功而另一张失败，会按id形成两个不同的FlowLog。
-
-## 上传包
-
-```bash
-flutter packages pub publish --server=https://pub.dartlang.org
-```
-
-## 已知问题：
-
-- ~~切换的Tab点击面积比看上去小~~
-- ~~flowlog超时后只能在下一次添加时被记录，应该添加一个定时器记录~~
-- ~~log功能代码在无需log时生效~~，可能影响性能，log部分功能最好不要被打包进正式版
-
-## 待完成
-- ~~flowlog的详情页~~
-- ~~导出并分享log~~
 

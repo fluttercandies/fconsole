@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:fconsole/fconsole.dart';
+import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
 import 'package:flutter/material.dart';
@@ -219,10 +220,23 @@ class FlowLogDetailPage extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(
-                          child: StText.normal("${log.log}"),
+                          child: StText.normal(
+                            "${log.log}",
+                            style: TextStyle(
+                              color: log.type == LogType.error
+                                  ? ColorPlate.red
+                                  : null,
+                            ),
+                          ),
                         ),
                         StText.normal(
-                            "+${endTime.difference(log.dateTime).inMilliseconds.abs()}ms"),
+                          "+${endTime.difference(log.dateTime).inMilliseconds.abs()}ms",
+                          style: TextStyle(
+                            color: log.type == LogType.error
+                                ? ColorPlate.red
+                                : null,
+                          ),
+                        ),
                       ],
                     ),
                   );
