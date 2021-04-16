@@ -1,7 +1,7 @@
 import '../../fconsole.dart';
 
 /// console对象
-var console = _Console();
+var fconsole = _Console();
 
 class _Console {
   void log([obj1, obj2, obj3, obj4, obj5, obj6, obj7, obj8, obj9, obj10]) {

@@ -1,3 +1,8 @@
+## 0.2.2+6
+* Fix stackoverflow error.
+* Fix end with error-log error.
+## 0.2.1+5
+* Fix null added to flowLog.
 ## 0.2.0+4
 * Add time info to share text.
 * Error flowLog show with red text.

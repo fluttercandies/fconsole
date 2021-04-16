@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
                 text: '打印log',
                 right: Container(),
                 onTap: () {
-                  console.log('打印信息:', DateTime.now());
+                  fconsole.log('打印信息:', DateTime.now());
                 },
               ),
               SettingRow(
@@ -82,7 +82,7 @@ class _MyAppState extends State<MyApp> {
                 text: '打印error',
                 right: Container(),
                 onTap: () {
-                  console.error('打印Error:', DateTime.now());
+                  fconsole.error('打印Error:', DateTime.now());
                 },
               ),
               Container(height: 12),
@@ -99,6 +99,7 @@ class _MyAppState extends State<MyApp> {
                 text: '原生Throw',
                 right: Container(),
                 onTap: () {
+                  var a = [][123];
                   throw '${DateTime.now().toIso8601String()}';
                 },
               ),

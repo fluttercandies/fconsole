@@ -110,11 +110,9 @@ class FlowLog {
 
   /// 结束当前Flow
   end([dynamic log, LogType type]) {
-    this.logs.add(Log(log, type));
-    // if (log != null) {
-    //   this._addRawLog(Log(log, type ?? LogType.log));
-    // }
-    // showToast('end');
+    if (log != null) {
+      this.logs.add(Log(log, type ?? LogType.log));
+    }
     timer?.cancel();
     timer = null;
     _endAt = DateTime.now();

@@ -4,11 +4,14 @@ PODS:
   - Flutter (1.0.0)
   - sensors (0.0.1):
     - Flutter
+  - share (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
   - sensors (from `.symlinks/plugins/sensors/ios`)
+  - share (from `.symlinks/plugins/share/ios`)
 
 EXTERNAL SOURCES:
   device_info:
@@ -17,12 +20,15 @@ EXTERNAL SOURCES:
     :path: Flutter
   sensors:
     :path: ".symlinks/plugins/sensors/ios"
+  share:
+    :path: ".symlinks/plugins/share/ios"
 
 SPEC CHECKSUMS:
   device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   sensors: 84eb7a30e47a649e4172b71d6e81be614c280336
+  share: 0b2c3e82132f5888bccca3351c504d0003b3b410
 
 PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0
