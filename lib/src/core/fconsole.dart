@@ -24,7 +24,7 @@ void runFConsoleApp(Widget app, {ErrHandler errHandler}) {
       String line,
     ) {
       FConsole.log(line, noPrint: true);
-      Zone.current.parent?.print(line);
+      Zone.root?.print(line);
     },
     handleUncaughtError: (
       Zone self,
@@ -35,7 +35,7 @@ void runFConsoleApp(Widget app, {ErrHandler errHandler}) {
     ) {
       // TODO: 堆栈错误可处理
       FConsole.error(error, noPrint: true);
-      Zone.current.parent?.print('$error');
+      Zone.root?.print('$error');
       errHandler?.call(self, parent, zone, error, stackTrace);
     },
   );
@@ -85,14 +85,14 @@ class FConsole extends ChangeNotifier {
   }
 
   static log(dynamic log, {bool noPrint = false}) {
-    // 有这个参数时，是自己捕获的print，不需要再打印
+    // 有这个参数时，是自己捕获的print，不需要再打印到fconsole
     if (!noPrint) {
       print(log);
-      return;
+      // return;
     }
-    if (FConsole.instance.isShow.value == false) {
-      return;
-    }
+    // if (FConsole.instance.isShow.value == false) {
+    //   return;
+    // }
     if (log != null) {
       Log lg = Log(log, LogType.log);
       FConsole.instance.verboselog.add(lg);
@@ -102,12 +102,14 @@ class FConsole extends ChangeNotifier {
   }
 
   static error(dynamic error, {bool noPrint = false}) {
+    // 有这个参数时，是自己捕获的print，不需要再打印到fconsole
     if (!noPrint) {
       print(error);
+      // return;
     }
-    if (FConsole.instance.isShow.value == false) {
-      return;
-    }
+    // if (FConsole.instance.isShow.value == false) {
+    //   return;
+    // }
     if (error != null) {
       Log lg = Log(error, LogType.error);
       FConsole.instance.errorLog.add(lg);

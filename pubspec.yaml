@@ -13,8 +13,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   sensors: ">=0.4.2 <2.0.0"
-  device_info: ^1.0.0
-  intl: ^0.16.0
+  device_info: ^2.0.0
+  intl: ^0.17.0
   oktoast: ^2.3.2
   tapped: ^1.0.2
   animations: ^1.1.2
