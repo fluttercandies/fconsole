@@ -23,10 +23,10 @@ Widget _consoleBtn() {
 }
 
 class ConsoleContainer extends StatefulWidget {
-  final Widget consoleBtn;
-  final Alignment consolePosition;
+  final Widget? consoleBtn;
+  final Alignment? consolePosition;
 
-  const ConsoleContainer({Key key, this.consoleBtn, this.consolePosition})
+  const ConsoleContainer({Key? key, this.consoleBtn, this.consolePosition})
       : super(key: key);
 
   @override
@@ -47,10 +47,10 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((d) {
-      Size childSize = _childGK.currentContext.size;
+    WidgetsBinding.instance!.addPostFrameCallback((d) {
+      Size? childSize = _childGK.currentContext!.size;
       setState(() {
-        childWidth = childSize.width;
+        childWidth = childSize!.width;
         childHeight = childSize.height;
         calculatePosition();
         isCalculateSize = false;
@@ -63,7 +63,7 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
     double height =
         MediaQueryData.fromWindow(window).removePadding().size.height;
 
-    Alignment position = widget.consolePosition;
+    Alignment position = widget.consolePosition!;
     xPosition = position.x * width / 2 + width / 2;
     yPosition = position.y * height / 2 + height / 2;
     if (xPosition < 0) {
@@ -80,7 +80,7 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
 
   @override
   void dispose() {
-    FConsole.instance.isShow.value = false;
+    FConsole.instance!.isShow.value = false;
     super.dispose();
   }
 
@@ -119,7 +119,7 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
 
 class _TouchMoveView extends StatefulWidget {
   final Widget child;
-  final Function onTap;
+  final Function? onTap;
 
   final double xPosition;
 
@@ -130,7 +130,7 @@ class _TouchMoveView extends StatefulWidget {
   final double childHeight;
 
   _TouchMoveView(
-      {@required this.child,
+      {required this.child,
       this.onTap,
       this.xPosition = 0,
       this.yPosition = 0,

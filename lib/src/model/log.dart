@@ -6,7 +6,7 @@ enum LogType {
 class Log {
   final dynamic log;
   final LogType type;
-  DateTime dateTime;
+  DateTime? dateTime;
 
   Log(this.log, this.type) {
     dateTime = DateTime.now();

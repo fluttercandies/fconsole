@@ -34,14 +34,14 @@ class StandardTextStyle {
 }
 
 class StText extends StatelessWidget {
-  final String text;
-  final TextStyle style;
-  final TextStyle defaultStyle;
-  final bool enableOffset;
-  final int maxLines;
+  final String? text;
+  final TextStyle? style;
+  final TextStyle? defaultStyle;
+  final bool? enableOffset;
+  final int? maxLines;
 
   const StText({
-    Key key,
+    Key? key,
     this.text,
     this.style,
     this.defaultStyle,
@@ -51,10 +51,10 @@ class StText extends StatelessWidget {
 
   const StText.small(
     String text, {
-    Key key,
-    TextStyle style,
-    bool enableOffset,
-    int maxLines,
+    Key? key,
+    TextStyle? style,
+    bool? enableOffset,
+    int? maxLines,
   }) : this(
           key: key,
           text: text,
@@ -66,10 +66,10 @@ class StText extends StatelessWidget {
 
   const StText.normal(
     String text, {
-    Key key,
-    TextStyle style,
-    bool enableOffset,
-    int maxLines,
+    Key? key,
+    TextStyle? style,
+    bool? enableOffset,
+    int? maxLines,
   }) : this(
           key: key,
           text: text,
@@ -81,10 +81,10 @@ class StText extends StatelessWidget {
 
   const StText.big(
     String text, {
-    Key key,
-    TextStyle style,
-    bool enableOffset,
-    int maxLines,
+    Key? key,
+    TextStyle? style,
+    bool? enableOffset,
+    int? maxLines,
   }) : this(
           key: key,
           text: text,
@@ -96,10 +96,10 @@ class StText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var finalText = text;
+    var finalText = text!;
     return Container(
       child: DefaultTextStyle(
-        style: defaultStyle,
+        style: defaultStyle!,
         child: Text(
           finalText,
           maxLines: maxLines ?? 25,

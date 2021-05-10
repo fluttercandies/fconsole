@@ -1,3 +1,6 @@
+
+## 1.0.0-nullsafety.0 
+* Add Nullsafety.
 ## 0.2.2+6
 * Fix stackoverflow error.
 * Fix end with error-log error.

@@ -18,14 +18,14 @@ class _FlowInfoState extends State<FlowInfo> {
 
   /// 正在查看详情列表
   bool get isDetailPage => currentLog != null;
-  FlowLog currentLog;
+  FlowLog? currentLog;
 
   List<FlowLog> get currentList {
     if (currentIndex == 0) {
-      return FlowCenter.instance.flowList.reversed.toList();
+      return FlowCenter.instance!.flowList.reversed.toList();
     }
     if (currentIndex == 1) {
-      return FlowCenter.instance.workingFlow.values.toList().reversed.toList();
+      return FlowCenter.instance!.workingFlow.values.toList().reversed.toList();
     }
     return [];
   }
@@ -33,12 +33,12 @@ class _FlowInfoState extends State<FlowInfo> {
   @override
   initState() {
     super.initState();
-    FlowCenter.instance.addListener(_didUpdateLog);
+    FlowCenter.instance!.addListener(_didUpdateLog);
   }
 
   @override
   dispose() {
-    FlowCenter.instance.removeListener(_didUpdateLog);
+    FlowCenter.instance!.removeListener(_didUpdateLog);
     super.dispose();
   }
 
@@ -136,11 +136,11 @@ class _FlowInfoState extends State<FlowInfo> {
 
 /// 查看一个Flow log的详情
 class FlowLogDetailPage extends StatelessWidget {
-  final FlowLog flowLog;
-  final Function onBack;
+  final FlowLog? flowLog;
+  final Function? onBack;
 
   const FlowLogDetailPage({
-    Key key,
+    Key? key,
     this.flowLog,
     this.onBack,
   }) : super(key: key);
@@ -168,12 +168,12 @@ class FlowLogDetailPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                       horizontal: 16,
                     ),
-                    child: StText.normal(flowLog.name ?? '--'),
+                    child: StText.normal(flowLog!.name ?? '--'),
                   ),
                 ),
                 _ActBtn(
                   onTap: () {
-                    Share.share(flowLog.shareText);
+                    Share.share(flowLog!.shareText);
                   },
                   right: true,
                   child: Icon(
@@ -194,16 +194,16 @@ class FlowLogDetailPage extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: flowLog.logs.length,
+                itemCount: flowLog!.logs!.length,
                 itemBuilder: (context, index) {
-                  var l = flowLog.logs;
+                  var l = flowLog!.logs!;
                   var log = l[index];
-                  var endTime = flowLog
-                      .logs[(index - 1).clamp(
+                  var endTime = flowLog!
+                      .logs![(index - 1).clamp(
                     0,
                     l.length - 1,
                   )]
-                      .dateTime;
+                      .dateTime!;
                   return Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16,
@@ -230,7 +230,7 @@ class FlowLogDetailPage extends StatelessWidget {
                           ),
                         ),
                         StText.normal(
-                          "+${endTime.difference(log.dateTime).inMilliseconds.abs()}ms",
+                          "+${endTime.difference(log.dateTime!).inMilliseconds.abs()}ms",
                           style: TextStyle(
                             color: log.type == LogType.error
                                 ? ColorPlate.red
@@ -252,15 +252,15 @@ class FlowLogDetailPage extends StatelessWidget {
 
 class _ActBtn extends StatelessWidget {
   const _ActBtn({
-    Key key,
-    @required this.onTap,
+    Key? key,
+    required this.onTap,
     this.child,
     this.right: false,
   }) : super(key: key);
 
   final bool right;
-  final Widget child;
-  final Function onTap;
+  final Widget? child;
+  final Function? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -294,11 +294,11 @@ class _ActBtn extends StatelessWidget {
 }
 
 class AnimatedSwither extends StatelessWidget {
-  final bool reverse;
-  final Widget child;
+  final bool? reverse;
+  final Widget? child;
 
   const AnimatedSwither({
-    Key key,
+    Key? key,
     this.reverse,
     this.child,
   }) : super(key: key);
@@ -307,7 +307,7 @@ class AnimatedSwither extends StatelessWidget {
   Widget build(BuildContext context) {
     return PageTransitionSwitcher(
       duration: const Duration(milliseconds: 300),
-      reverse: !reverse,
+      reverse: !reverse!,
       transitionBuilder: (
         Widget child,
         Animation<double> animation,
@@ -327,16 +327,16 @@ class AnimatedSwither extends StatelessWidget {
 
 /// 一行FlowLog组
 class _Row extends StatelessWidget {
-  final String title;
-  final String desc;
-  final String detail1;
-  final String detail2;
-  final bool isWarning;
+  final String? title;
+  final String? desc;
+  final String? detail1;
+  final String? detail2;
+  final bool? isWarning;
   final bool isProcessing;
-  final Function onTap;
-  final Function onShare;
+  final Function? onTap;
+  final Function? onShare;
   const _Row({
-    Key key,
+    Key? key,
     this.title,
     this.desc,
     this.detail1,
@@ -348,7 +348,7 @@ class _Row extends StatelessWidget {
   }) : super(key: key);
 
   Icon get icon {
-    if (isWarning) {
+    if (isWarning!) {
       return Icon(
         Icons.warning,
         size: 18,
@@ -373,7 +373,7 @@ class _Row extends StatelessWidget {
   Widget build(BuildContext context) {
     return LeftScroll(
       key: key,
-      onTap: onTap,
+      onTap: onTap as void Function()?,
       buttons: [
         Tapped(
           onTap: onShare,
@@ -446,15 +446,15 @@ class _Row extends StatelessWidget {
 
 /// 选项卡按钮
 class _TapBtn extends StatelessWidget {
-  final String title;
+  final String? title;
   final double space;
-  final double minwidth;
+  final double? minwidth;
   final bool selected;
   final bool small;
-  final Function onTap;
+  final Function? onTap;
 
   const _TapBtn({
-    Key key,
+    Key? key,
     this.title,
     this.space: 24,
     this.selected: false,
@@ -468,7 +468,7 @@ class _TapBtn extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(minWidth: minwidth ?? 60),
       child: GestureDetector(
-        onTap: onTap,
+        onTap: onTap as void Function()?,
         behavior: HitTestBehavior.translucent,
         child: Container(
           color: selected ? ColorPlate.white : ColorPlate.clear,

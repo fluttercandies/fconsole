@@ -5,15 +5,14 @@ import 'package:fconsole/src/model/log.dart';
 import 'package:flutter/material.dart';
 
 import '../model/log.dart';
-import 'shake_detector.dart';
 
 typedef ErrHandler = void Function(
     Zone, ZoneDelegate, Zone, Object, StackTrace);
 
 // TODO: 拦截的log需不需要显示在其他地方?
-void runFConsoleApp(Widget app, {ErrHandler errHandler}) {
+void runFConsoleApp(Widget app, {ErrHandler? errHandler}) {
   FlutterError.onError = (details) {
-    Zone.current.handleUncaughtError(details.exception, details.stack);
+    Zone.current.handleUncaughtError(details.exception, details.stack!);
   };
 
   var zoneSpecification = ZoneSpecification(
@@ -24,7 +23,7 @@ void runFConsoleApp(Widget app, {ErrHandler errHandler}) {
       String line,
     ) {
       FConsole.log(line, noPrint: true);
-      Zone.root?.print(line);
+      Zone.root.print(line);
     },
     handleUncaughtError: (
       Zone self,
@@ -35,7 +34,7 @@ void runFConsoleApp(Widget app, {ErrHandler errHandler}) {
     ) {
       // TODO: 堆栈错误可处理
       FConsole.error(error, noPrint: true);
-      Zone.root?.print('$error');
+      Zone.root.print('$error');
       errHandler?.call(self, parent, zone, error, stackTrace);
     },
   );
@@ -47,31 +46,17 @@ void runFConsoleApp(Widget app, {ErrHandler errHandler}) {
 
 class FConsole extends ChangeNotifier {
   ConsoleOptions options = ConsoleOptions();
-  ShakeDetector shakeDetector;
+
 
   ValueNotifier isShow = ValueNotifier(false);
 
-  void startShakeListener(Function() onShake) {
-    stopShakeListener();
-    shakeDetector = ShakeDetector.autoStart(onPhoneShake: () {
-      ///detecotor phone shake
-      onShake?.call();
-    });
-  }
-
-  void stopShakeListener() {
-    if (shakeDetector != null) {
-      shakeDetector.stopListening();
-      shakeDetector = null;
-    }
-  }
 
   List<Log> allLog = [];
   List<Log> errorLog = [];
   List<Log> verboselog = [];
   int currentLogIndex = 0;
 
-  List<Log> logListOfType(int logType) {
+  List<Log>? logListOfType(int? logType) {
     if (logType == 0) {
       return allLog;
     }
@@ -95,9 +80,9 @@ class FConsole extends ChangeNotifier {
     // }
     if (log != null) {
       Log lg = Log(log, LogType.log);
-      FConsole.instance.verboselog.add(lg);
-      FConsole.instance.allLog.add(lg);
-      FConsole.instance.notifyListeners();
+      FConsole.instance!.verboselog.add(lg);
+      FConsole.instance!.allLog.add(lg);
+      FConsole.instance!.notifyListeners();
     }
   }
 
@@ -112,9 +97,9 @@ class FConsole extends ChangeNotifier {
     // }
     if (error != null) {
       Log lg = Log(error, LogType.error);
-      FConsole.instance.errorLog.add(lg);
-      FConsole.instance.allLog.add(lg);
-      FConsole.instance.notifyListeners();
+      FConsole.instance!.errorLog.add(lg);
+      FConsole.instance!.allLog.add(lg);
+      FConsole.instance!.notifyListeners();
     }
   }
 
@@ -132,17 +117,17 @@ class FConsole extends ChangeNotifier {
         errorLog.clear();
       }
     }
-    FConsole.instance.notifyListeners();
+    FConsole.instance!.notifyListeners();
   }
 
   /// 单例
-  static FConsole _instance;
+  static FConsole? _instance;
 
-  factory FConsole() => _getInstance();
+  factory FConsole() => _getInstance()!;
 
-  static FConsole get instance => _getInstance();
+  static FConsole? get instance => _getInstance();
 
-  static FConsole _getInstance() {
+  static FConsole? _getInstance() {
     if (_instance == null) {
       _instance = FConsole._();
     }
@@ -160,13 +145,12 @@ class ConsoleOptions {
   ConsoleOptions({
     this.showTime = true,
     this.timeFormat = "HH:mm:ss",
-    this.displayMode = ConsoleDisplayMode.Shake,
+    this.displayMode = ConsoleDisplayMode.None,
   });
 }
 
 ///How to show the console button
 enum ConsoleDisplayMode {
   None, //Don't show
-  Shake, //by shake
   Always, // always show
 }

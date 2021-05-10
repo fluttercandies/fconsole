@@ -84,10 +84,10 @@ class _ConsolePanelState extends State<ConsolePanel> {
               child: Tapped(
                 onTap: () {
                   if (currentIndex == 0) {
-                    FConsole.instance.clear(true);
+                    FConsole.instance!.clear(true);
                   }
                   if (currentIndex == 1) {
-                    FlowCenter.instance.clearAll();
+                    FlowCenter.instance!.clearAll();
                   }
                   setState(() {});
                 },
@@ -107,7 +107,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
             Expanded(
               child: Tapped(
                 onTap: () {
-                  widget.onHideTap?.call();
+                  widget.onHideTap.call();
                 },
                 child: Container(
                   color: ColorPlate.clear,
@@ -136,7 +136,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
             Expanded(
                 child: GestureDetector(
               onTap: () {
-                widget.onHideTap?.call();
+                widget.onHideTap.call();
               },
               behavior: HitTestBehavior.translucent,
             )),
@@ -174,15 +174,15 @@ class _ConsolePanelState extends State<ConsolePanel> {
 
 /// 选项卡按钮
 class _TapBtn extends StatelessWidget {
-  final String title;
+  final String? title;
   final double space;
-  final double minwidth;
+  final double? minwidth;
   final bool selected;
   final bool small;
-  final Function onTap;
+  final Function? onTap;
 
   const _TapBtn({
-    Key key,
+    Key? key,
     this.title,
     this.space: 24,
     this.selected: false,
@@ -196,7 +196,7 @@ class _TapBtn extends StatelessWidget {
     return Container(
       constraints: BoxConstraints(minWidth: minwidth ?? 60),
       child: GestureDetector(
-        onTap: onTap,
+        onTap: onTap as void Function()?,
         behavior: HitTestBehavior.translucent,
         child: Container(
           color: selected ? ColorPlate.white : ColorPlate.clear,
@@ -225,7 +225,7 @@ class _LogInfoPannelState extends State<LogInfoPannel>
 
   set currentIndex(int index) {
     _currentTabIndex = index;
-    FConsole.instance.currentLogIndex = _currentTabIndex;
+    FConsole.instance!.currentLogIndex = _currentTabIndex;
   }
 
   @override
@@ -342,27 +342,27 @@ class _LogListView extends StatefulWidget {
 
 class __LogListViewState extends State<_LogListView> {
   final TextEditingController _filterTEC = TextEditingController();
-  List<Log> logs;
-  int currentIndex;
+  List<Log>? logs;
+  int? currentIndex;
 
   @override
   initState() {
     super.initState();
     currentIndex = widget.currentIndex;
-    logs = FConsole.instance.logListOfType(currentIndex);
-    FConsole.instance.addListener(_didUpdateLog);
+    logs = FConsole.instance!.logListOfType(currentIndex);
+    FConsole.instance!.addListener(_didUpdateLog);
   }
 
   @override
   dispose() {
     super.dispose();
-    FConsole.instance.removeListener(_didUpdateLog);
+    FConsole.instance!.removeListener(_didUpdateLog);
     _filterTEC.dispose();
   }
 
   _didUpdateLog() {
     setState(() {
-      logs = FConsole.instance.logListOfType(currentIndex);
+      logs = FConsole.instance!.logListOfType(currentIndex);
     });
   }
 
@@ -414,7 +414,7 @@ class __LogListViewState extends State<_LogListView> {
                               ),
                             ),
                           ),
-                          if (FConsole.instance.options.showTime)
+                          if (FConsole.instance!.options.showTime)
                             Container(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 6,
@@ -443,16 +443,15 @@ class __LogListViewState extends State<_LogListView> {
   }
 
   String time(Log log) {
-    if (FConsole.instance.options.showTime) {
-      return DateFormat(FConsole.instance.options.timeFormat)
-              .format(log.dateTime) ??
-          "";
+    if (FConsole.instance!.options.showTime) {
+      return DateFormat(FConsole.instance!.options.timeFormat)
+              .format(log.dateTime!);
     }
     return "";
   }
 
   List<Log> newLogs() {
-    List<Log> newlogs = List.from(logs);
+    List<Log> newlogs = List.from(logs!);
     if (_filterTEC.text.trim().isNotEmpty) {
       String filter = _filterTEC.text.trim();
       //过滤

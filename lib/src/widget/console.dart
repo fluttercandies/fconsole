@@ -22,14 +22,14 @@ part 'console_container.dart';
 
 LinkedHashMap<Object, BuildContext> _contextMap = LinkedHashMap();
 
-OverlayEntry consoleEntry;
+OverlayEntry? consoleEntry;
 
 ///show console btn
-void showConsole({BuildContext context}) {
-  if (!FConsole.instance.isShow.value) {
-    FConsole.instance.isShow.value = true;
+void showConsole({BuildContext? context}) {
+  if (!FConsole.instance!.isShow.value) {
+    FConsole.instance!.isShow.value = true;
     context ??= _contextMap.values.first;
-    _ConsoleTheme _consoleTheme = _ConsoleTheme.of(context);
+    _ConsoleTheme _consoleTheme = _ConsoleTheme.of(context)!;
     Widget consoleBtn = _consoleTheme.consoleBtn ?? _consoleBtn();
 
     Alignment consolePosition =
@@ -41,36 +41,36 @@ void showConsole({BuildContext context}) {
         consolePosition: consolePosition,
       );
     });
-    Overlay.of(context).insert(consoleEntry);
+    Overlay.of(context)!.insert(consoleEntry!);
   }
 }
 
 ///hide console btn
-void hideConsole({BuildContext context}) {
-  if (consoleEntry != null && FConsole.instance.isShow.value) {
-    FConsole.instance.isShow.value = false;
-    consoleEntry.remove();
+void hideConsole({BuildContext? context}) {
+  if (consoleEntry != null && FConsole.instance!.isShow.value) {
+    FConsole.instance!.isShow.value = false;
+    consoleEntry!.remove();
     consoleEntry = null;
   }
 }
 
-OverlayEntry consolePanelEntry;
+OverlayEntry? consolePanelEntry;
 
 ///show console panel
-showConsolePanel(Function onHideTap, {BuildContext context}) {
+showConsolePanel(Function onHideTap, {BuildContext? context}) {
   context ??= _contextMap.values.first;
   consolePanelEntry = OverlayEntry(builder: (ctx) {
     return ConsolePanel(() {
-      onHideTap?.call();
+      onHideTap();
       hideConsolePanel();
     });
   });
-  Overlay.of(context).insert(consolePanelEntry);
+  Overlay.of(context)!.insert(consolePanelEntry!);
 }
 
 hideConsolePanel() {
   if (consolePanelEntry != null) {
-    consolePanelEntry.remove();
+    consolePanelEntry!.remove();
     consolePanelEntry = null;
   }
 }
@@ -80,17 +80,17 @@ class ConsoleWidget extends StatefulWidget {
   final Widget child;
 
   /// 悬浮按钮组件
-  final Widget consoleBtn;
+  final Widget? consoleBtn;
 
   /// 悬浮按钮配置
-  final ConsoleOptions options;
+  final ConsoleOptions? options;
 
   /// 默认初始化位置
-  final Alignment consolePosition;
+  final Alignment? consolePosition;
 
   ConsoleWidget({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
     this.consolePosition,
     this.consoleBtn,
     this.options,
@@ -103,22 +103,14 @@ class ConsoleWidget extends StatefulWidget {
 class _ConsoleWidgetState extends State<ConsoleWidget> {
   dispose() {
     _contextMap.remove(this);
-    FConsole.instance.stopShakeListener();
     super.dispose();
   }
 
   initState() {
     super.initState();
-    FConsole.instance.options = widget.options ?? ConsoleOptions();
-    if (FConsole.instance.options.displayMode == ConsoleDisplayMode.Shake) {
-      FConsole.instance.startShakeListener(() {
-        if (mounted) {
-          showConsole();
-        }
-      });
-    }
-    WidgetsBinding.instance.addPostFrameCallback((d) {
-      if (FConsole.instance.options.displayMode == ConsoleDisplayMode.Always) {
+    FConsole.instance!.options = widget.options ?? ConsoleOptions();
+    WidgetsBinding.instance!.addPostFrameCallback((d) {
+      if (FConsole.instance!.options.displayMode == ConsoleDisplayMode.Always) {
         showConsole();
       }
     });
@@ -134,7 +126,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
         GlobalWidgetsLocalizations.delegate,
       ],
       child: MediaQuery(
-        /// TODO: 功能存疑
+        /// 移除顶部安全区
         data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
         child: Material(
           child: OKToast(
@@ -162,11 +154,11 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
 
 /// TODO: 功能存疑
 class _ConsoleTheme extends InheritedWidget {
-  final Widget consoleBtn;
+  final Widget? consoleBtn;
   final Widget child;
-  final Alignment consolePosition;
+  final Alignment? consolePosition;
 
-  _ConsoleTheme({this.child, this.consoleBtn, this.consolePosition})
+  _ConsoleTheme({required this.child, this.consoleBtn, this.consolePosition})
       : super(child: child);
 
   @override
@@ -174,6 +166,6 @@ class _ConsoleTheme extends InheritedWidget {
     return true;
   }
 
-  static _ConsoleTheme of(BuildContext context) =>
+  static _ConsoleTheme? of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<_ConsoleTheme>();
 }
