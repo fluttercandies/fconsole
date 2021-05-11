@@ -1,4 +1,6 @@
 
+## 1.0.0-nullsafety.1
+* Update Share version.
 ## 1.0.0-nullsafety.0 
 * Add Nullsafety.
 ## 0.2.2+6
