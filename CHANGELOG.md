@@ -1,4 +1,6 @@
 
+## 1.1.0
+* Breaking Change: add beforeRun callback in runAppWithConsole.
 ## 1.0.0-nullsafety.1
 * Update Share version.
 ## 1.0.0-nullsafety.0 

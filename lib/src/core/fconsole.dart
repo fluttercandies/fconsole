@@ -9,8 +9,13 @@ import '../model/log.dart';
 typedef ErrHandler = void Function(
     Zone, ZoneDelegate, Zone, Object, StackTrace);
 
-// TODO: 拦截的log需不需要显示在其他地方?
-void runFConsoleApp(Widget app, {ErrHandler? errHandler}) {
+/// Note: beforeRun will be called before runApp()
+/// if some code run ouside runAppWithConsole, the log will not cache by fconsole.
+void runAppWithConsole(
+  Widget app, {
+  Future Function()? beforeRun,
+  ErrHandler? errHandler,
+}) async {
   FlutterError.onError = (details) {
     Zone.current.handleUncaughtError(details.exception, details.stack!);
   };
@@ -39,7 +44,17 @@ void runFConsoleApp(Widget app, {ErrHandler? errHandler}) {
     },
   );
   runZoned(
-    () => runApp(app),
+    () async {
+      await beforeRun?.call();
+      runApp(
+        ConsoleWidget(
+          options: ConsoleOptions(
+            displayMode: ConsoleDisplayMode.Always,
+          ),
+          child: app,
+        ),
+      );
+    },
     zoneSpecification: zoneSpecification,
   );
 }
@@ -47,9 +62,7 @@ void runFConsoleApp(Widget app, {ErrHandler? errHandler}) {
 class FConsole extends ChangeNotifier {
   ConsoleOptions options = ConsoleOptions();
 
-
   ValueNotifier isShow = ValueNotifier(false);
-
 
   List<Log> allLog = [];
   List<Log> errorLog = [];
