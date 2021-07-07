@@ -6,7 +6,7 @@ import 'package:tapped/tapped.dart';
 
 import 'style/color.dart';
 
-void main() => runFConsoleApp(MyApp());
+void main() => runAppWithFConsole(MyApp());
 
 class MyApp extends StatefulWidget {
   @override

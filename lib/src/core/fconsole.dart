@@ -11,7 +11,7 @@ typedef ErrHandler = void Function(
 
 /// Note: beforeRun will be called before runApp()
 /// if some code run ouside runAppWithConsole, the log will not cache by fconsole.
-void runAppWithConsole(
+void runAppWithFConsole(
   Widget app, {
   Future Function()? beforeRun,
   ErrHandler? errHandler,

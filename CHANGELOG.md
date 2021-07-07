@@ -1,4 +1,7 @@
 
+## 1.1.1
+* Breaking Change: rename runAppWithConsole to runAppWithFConsole.
+* Remove oktoast export.
 ## 1.1.0
 * Breaking Change: add beforeRun callback in runAppWithConsole.
 ## 1.0.0-nullsafety.1
