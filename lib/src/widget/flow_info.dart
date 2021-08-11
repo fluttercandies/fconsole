@@ -62,7 +62,7 @@ class _FlowInfoState extends State<FlowInfo> {
           _TapBtn(
             selected: currentIndex == 0,
             small: true,
-            title: "Done",
+            title: "Done(${FlowCenter.instance!.flowList.length})",
             onTap: () {
               setState(() {
                 currentIndex = 0;
@@ -77,7 +77,7 @@ class _FlowInfoState extends State<FlowInfo> {
           _TapBtn(
             selected: currentIndex == 1,
             small: true,
-            title: "Processing",
+            title: "Processing(${FlowCenter.instance!.workingFlow.length})",
             space: 12,
             onTap: () {
               setState(() {

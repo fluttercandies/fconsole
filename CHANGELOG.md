@@ -1,4 +1,6 @@
 
+## 1.1.2
+* Now display flow log count.
 ## 1.1.1
 * Breaking Change: rename runAppWithConsole to runAppWithFConsole.
 * Remove oktoast export.
