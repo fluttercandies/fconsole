@@ -118,37 +118,48 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
 
   Widget build(BuildContext context) {
     /// TODO: i18n功能存疑
-    return Localizations(
-      locale: Locale("zh"),
-      delegates: [
-        GlobalCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      child: MediaQuery(
-        /// 移除顶部安全区
-        data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
-        child: Material(
-          child: OKToast(
-            radius: 4,
-            backgroundColor: ColorPlate.black.withOpacity(0.6),
-            child: _ConsoleTheme(
-              consoleBtn: widget.consoleBtn,
-              consolePosition: widget.consolePosition,
-              child: Directionality(
+    var mediaQuery = MediaQuery(
+      /// 移除顶部安全区
+      data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
+      child: Material(
+        child: OKToast(
+          radius: 4,
+          backgroundColor: ColorPlate.black.withOpacity(0.6),
+          child: _ConsoleTheme(
+            consoleBtn: widget.consoleBtn,
+            consolePosition: widget.consolePosition,
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: Stack(
                 textDirection: TextDirection.ltr,
-                child: Overlay(initialEntries: [
-                  OverlayEntry(builder: (ctx) {
-                    _contextMap[this] = ctx;
-                    return widget.child;
-                  })
-                ]),
+                children: [
+                  widget.child,
+                  Localizations(
+                    locale: Locale("zh"),
+                    delegates: [
+                      GlobalCupertinoLocalizations.delegate,
+                      GlobalMaterialLocalizations.delegate,
+                      GlobalWidgetsLocalizations.delegate,
+                    ],
+                    child: Overlay(
+                      initialEntries: [
+                        OverlayEntry(
+                          builder: (ctx) {
+                            _contextMap[this] = ctx;
+                            return Container();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
       ),
     );
+    return mediaQuery;
   }
 }
 

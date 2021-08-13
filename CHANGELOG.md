@@ -1,4 +1,6 @@
 
+## 1.1.3
+* Fix i18n bug.
 ## 1.1.2
 * Now display flow log count.
 ## 1.1.1
