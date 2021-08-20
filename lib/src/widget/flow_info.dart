@@ -89,7 +89,7 @@ class _FlowInfoState extends State<FlowInfo> {
       ),
     );
     var detailPage = FlowLogDetailPage(
-      flowLog: currentLog!,
+      log: currentLog,
       onBack: () {
         setState(() {
           currentLog = null;
@@ -136,17 +136,21 @@ class _FlowInfoState extends State<FlowInfo> {
 
 /// 查看一个Flow log的详情
 class FlowLogDetailPage extends StatelessWidget {
-  final FlowLog flowLog;
+  final FlowLog? log;
   final Function? onBack;
 
   const FlowLogDetailPage({
     Key? key,
-    required this.flowLog,
+    required this.log,
     this.onBack,
   }) : super(key: key);
 
+  FlowLog get flowLog => log!;
+
   @override
   Widget build(BuildContext context) {
+    if (log == null) return Container();
+
     return Container(
       child: Column(
         children: [
