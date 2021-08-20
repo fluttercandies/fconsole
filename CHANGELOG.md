@@ -1,4 +1,6 @@
 
+## 1.1.4
+* Add optional id to Flowlog.
 ## 1.1.3
 * Fix i18n bug.
 ## 1.1.2

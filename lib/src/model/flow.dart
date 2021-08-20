@@ -24,7 +24,10 @@ class FlowLogDesc {
 
 // 一个工作流
 class FlowLog {
-  final String? name;
+  final String name;
+
+  /// id，可不传，默认为空，在name冲突时作为唯一标识
+  final String id;
   List<Log>? logs;
 
   DateTime? createdAt;
@@ -36,23 +39,25 @@ class FlowLog {
   DateTime? get endAt => _endAt;
 
   FlowLog._({
-    this.name,
+    required this.name,
     this.logs,
     this.timeout,
     this.createdAt,
     DateTime? end,
+    this.id = '',
   }) : _endAt = end {
     logs ??= [];
   }
 
   FlowLog({
     this.name: "system",
+    this.id: "",
     this.logs,
     Duration? timeout: const Duration(seconds: 30),
   })  : createdAt = DateTime.now(),
         this.timeout = timeout ?? const Duration(seconds: 30) {
     logs ??= [];
-    FlowCenter.instance!.workingFlow[name] = this;
+    FlowCenter.instance!.workingFlow[name + id] = this;
   }
 
   DateTime? get latestTime {
@@ -126,7 +131,7 @@ class FlowLog {
     ));
     this.createdAt = DateTime.now();
     this._endAt = null;
-    FlowCenter.instance!.workingFlow.remove(name);
+    FlowCenter.instance!.workingFlow.remove(name + id);
     this.logs!.clear();
     FlowCenter.instance!._notify();
   }
@@ -184,15 +189,32 @@ class FlowLog {
     return logStr.join('\n');
   }
 
-  /// 通过id获取一个正在进行的Flow，如果flow还没有创建，那么就创建一个新的再返回
-  static FlowLog? of(String name, [Duration? initTimeOut]) {
+  /// 通过name获取一个正在进行的Flow，如果flow还没有创建，那么就创建一个新的再返回
+  static FlowLog of(String name, [Duration? initTimeOut]) {
     if (FlowCenter.instance!.workingFlow[name] == null) {
       FlowCenter.instance!.workingFlow[name] = FlowLog(
         name: name,
         timeout: initTimeOut,
       );
     }
-    return FlowCenter.instance!.workingFlow[name];
+    return FlowCenter.instance!.workingFlow[name]!;
+  }
+
+  /// 通过name获取一个正在进行的Flow，如果flow还没有创建，那么就创建一个新的再返回
+  /// 此方法可以额外指定一个id，在name相同时，使用id判断是否是同一个flow
+  static FlowLog ofNameAndId(
+    String name, {
+    Duration? initTimeOut,
+    String id = '',
+  }) {
+    if (FlowCenter.instance!.workingFlow[name + id] == null) {
+      FlowCenter.instance!.workingFlow[name + id] = FlowLog(
+        name: name,
+        timeout: initTimeOut,
+        id: id,
+      );
+    }
+    return FlowCenter.instance!.workingFlow[name + id]!;
   }
 
   @override

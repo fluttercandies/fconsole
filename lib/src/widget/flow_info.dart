@@ -89,7 +89,7 @@ class _FlowInfoState extends State<FlowInfo> {
       ),
     );
     var detailPage = FlowLogDetailPage(
-      flowLog: currentLog,
+      flowLog: currentLog!,
       onBack: () {
         setState(() {
           currentLog = null;
@@ -136,12 +136,12 @@ class _FlowInfoState extends State<FlowInfo> {
 
 /// 查看一个Flow log的详情
 class FlowLogDetailPage extends StatelessWidget {
-  final FlowLog? flowLog;
+  final FlowLog flowLog;
   final Function? onBack;
 
   const FlowLogDetailPage({
     Key? key,
-    this.flowLog,
+    required this.flowLog,
     this.onBack,
   }) : super(key: key);
 
@@ -168,12 +168,12 @@ class FlowLogDetailPage extends StatelessWidget {
                     padding: EdgeInsets.symmetric(
                       horizontal: 16,
                     ),
-                    child: StText.normal(flowLog!.name ?? '--'),
+                    child: StText.normal(flowLog.name),
                   ),
                 ),
                 _ActBtn(
                   onTap: () {
-                    Share.share(flowLog!.shareText);
+                    Share.share(flowLog.shareText);
                   },
                   right: true,
                   child: Icon(
@@ -194,11 +194,11 @@ class FlowLogDetailPage extends StatelessWidget {
               alignment: Alignment.topCenter,
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: flowLog!.logs!.length,
+                itemCount: flowLog.logs!.length,
                 itemBuilder: (context, index) {
-                  var l = flowLog!.logs!;
+                  var l = flowLog.logs!;
                   var log = l[index];
-                  var endTime = flowLog!
+                  var endTime = flowLog
                       .logs![(index - 1).clamp(
                     0,
                     l.length - 1,
