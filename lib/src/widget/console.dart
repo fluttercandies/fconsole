@@ -122,38 +122,34 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
       /// 移除顶部安全区
       data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
       child: Material(
-        child: OKToast(
-          radius: 4,
-          backgroundColor: ColorPlate.black.withOpacity(0.6),
-          child: _ConsoleTheme(
-            consoleBtn: widget.consoleBtn,
-            consolePosition: widget.consolePosition,
-            child: Directionality(
+        child: _ConsoleTheme(
+          consoleBtn: widget.consoleBtn,
+          consolePosition: widget.consolePosition,
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: Stack(
               textDirection: TextDirection.ltr,
-              child: Stack(
-                textDirection: TextDirection.ltr,
-                children: [
-                  widget.child,
-                  Localizations(
-                    locale: Locale("zh"),
-                    delegates: [
-                      GlobalCupertinoLocalizations.delegate,
-                      GlobalMaterialLocalizations.delegate,
-                      GlobalWidgetsLocalizations.delegate,
+              children: [
+                widget.child,
+                Localizations(
+                  locale: Locale("zh"),
+                  delegates: [
+                    GlobalCupertinoLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                  ],
+                  child: Overlay(
+                    initialEntries: [
+                      OverlayEntry(
+                        builder: (ctx) {
+                          _contextMap[this] = ctx;
+                          return Container();
+                        },
+                      )
                     ],
-                    child: Overlay(
-                      initialEntries: [
-                        OverlayEntry(
-                          builder: (ctx) {
-                            _contextMap[this] = ctx;
-                            return Container();
-                          },
-                        )
-                      ],
-                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

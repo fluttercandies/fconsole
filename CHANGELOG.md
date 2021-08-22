@@ -1,4 +1,6 @@
 
+## 1.1.5
+* Remove top oktoast widget.
 ## 1.1.4
 * Add optional id to Flowlog.
 * Change some return-value to no-null.
