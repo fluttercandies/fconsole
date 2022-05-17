@@ -7,6 +7,7 @@ import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
 import 'package:fconsole/src/widget/flow_info.dart';
+import 'package:fconsole/src/widget/messages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info/device_info.dart';

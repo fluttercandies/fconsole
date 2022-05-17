@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:fconsole/fconsole.dart';
-import 'package:fconsole/src/delegate/custom_card_delegate.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:flutter/material.dart';
 

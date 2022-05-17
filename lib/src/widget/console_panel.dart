@@ -85,13 +85,15 @@ class _ConsolePanelState extends State<ConsolePanel> {
                 children: <Widget>[
                   topOpViews,
                   Expanded(
-                    child: IndexedStack(
-                      index: currentIndex,
-                      children: customCards
-                          .map(
-                            (e) => e.builder(context),
-                          )
-                          .toList(),
+                    child: FconsoleMessageView(
+                      child: IndexedStack(
+                        index: currentIndex,
+                        children: customCards
+                            .map(
+                              (e) => e.builder(context),
+                            )
+                            .toList(),
+                      ),
                     ),
                   ),
                 ],
@@ -393,8 +395,7 @@ class __LogListViewState extends State<_LogListView> {
                           text: newlogs[index].toString(),
                         ),
                       );
-                      // TODO:
-                      // showToast("Copy Success");
+                      showFconsoleMessage("Copy Success");
                     },
                     child: Container(
                       width: double.infinity,
@@ -402,6 +403,7 @@ class __LogListViewState extends State<_LogListView> {
                         horizontal: 12,
                         vertical: 10,
                       ),
+                      color: ColorPlate.clear,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[

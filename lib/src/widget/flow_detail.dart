@@ -2,6 +2,7 @@ import 'package:fconsole/src/model/flow.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
+import 'package:fconsole/src/widget/messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share/share.dart';
@@ -87,8 +88,7 @@ class FlowLogDetailPage extends StatelessWidget {
                           text: "${log.log}",
                         ),
                       );
-                      // TODO:
-                      // showToast("Copy Success");
+                      showFconsoleMessage("Copy Success");
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
