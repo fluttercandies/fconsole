@@ -6,7 +6,37 @@ import 'package:tapped/tapped.dart';
 
 import 'style/color.dart';
 
-void main() => runAppWithFConsole(MyApp());
+void main() => runAppWithFConsole(
+      MyApp(),
+      delegate: MyCardDelegate(),
+    );
+
+class MyCardDelegate extends FConsoleCardDelegate {
+  @override
+  List<CustomCard> cardsBuilder(DefaultCards defaultCards) {
+    return [
+      defaultCards.logCard,
+      defaultCards.flowCard,
+      CustomCard(
+        name: "my",
+        builder: (ctx) => CustomLogPage(),
+      ),
+      defaultCards.sysInfoCard,
+    ];
+  }
+}
+
+class CustomLogPage extends StatelessWidget {
+  const CustomLogPage({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      child: Text('custom page content'),
+    );
+  }
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -17,12 +47,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    FConsole.instance.isShow.addListener(() {
+    FConsole.instance.status.addListener(() {
       setState(() {});
     });
   }
 
-  bool get consoleHasShow => FConsole.instance.isShow.value;
+  bool get consoleHasShow =>
+      FConsole.instance.status.value != FConsoleStatus.hide;
 
   double slideValue = 0;
 

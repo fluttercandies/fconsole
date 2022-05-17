@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:ui';
 import 'package:fconsole/fconsole.dart';
+import 'package:fconsole/src/delegate/custom_card_delegate.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
@@ -24,8 +25,8 @@ OverlayEntry? consoleEntry;
 
 ///show console btn
 void showConsole({BuildContext? context}) {
-  if (!FConsole.instance.isShow.value) {
-    FConsole.instance.isShow.value = true;
+  if (FConsole.instance.status.value == FConsoleStatus.hide) {
+    FConsole.instance.status.value = FConsoleStatus.consoleBtn;
     context ??= _contextMap.values.first;
     _ConsoleTheme _consoleTheme = _ConsoleTheme.of(context)!;
     Widget consoleBtn = _consoleTheme.consoleBtn ?? _consoleBtn();
@@ -45,8 +46,8 @@ void showConsole({BuildContext? context}) {
 
 ///hide console btn
 void hideConsole({BuildContext? context}) {
-  if (consoleEntry != null && FConsole.instance.isShow.value) {
-    FConsole.instance.isShow.value = false;
+  if (consoleEntry != null) {
+    FConsole.instance.status.value = FConsoleStatus.hide;
     consoleEntry!.remove();
     consoleEntry = null;
   }
@@ -68,6 +69,7 @@ showConsolePanel(Function onHideTap, {BuildContext? context}) {
 
 hideConsolePanel() {
   if (consolePanelEntry != null) {
+    FConsole.instance.status.value = FConsoleStatus.consoleBtn;
     consolePanelEntry!.remove();
     consolePanelEntry = null;
   }

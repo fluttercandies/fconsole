@@ -42,7 +42,8 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
 
   ///是否要计算大小
   bool isCalculateSize = true;
-  bool isShowConsoleBtn = true;
+  bool get isShowConsoleBtn =>
+      FConsole.instance.status.value == FConsoleStatus.consoleBtn;
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
 
   @override
   void dispose() {
-    FConsole.instance.isShow.value = false;
+    FConsole.instance.status.value = FConsoleStatus.hide;
     super.dispose();
   }
 
@@ -106,9 +107,10 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
                       visible: isShowConsoleBtn,
                     ),
                     onTap: () {
-                      isShowConsoleBtn = false;
+                      FConsole.instance.status.value = FConsoleStatus.panel;
                       showConsolePanel(() {
-                        isShowConsoleBtn = true;
+                        FConsole.instance.status.value =
+                            FConsoleStatus.consoleBtn;
                       });
                     },
                   )),

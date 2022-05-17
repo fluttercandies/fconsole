@@ -125,6 +125,11 @@ class _FlowInfoState extends State<FlowInfo> {
             },
           ),
         ),
+        BottomActionView(
+          onClear: () {
+            FlowCenter.instance.clearAll();
+          },
+        ),
       ],
     );
     return AnimatedSwither(

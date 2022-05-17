@@ -12,60 +12,112 @@ class ConsolePanel extends StatefulWidget {
 class _ConsolePanelState extends State<ConsolePanel> {
   int currentIndex = 0;
 
+  Set<Function> clearFunctions = {};
+
   @override
   Widget build(BuildContext context) {
+    var customCards =
+        FConsole.instance.delegate?.cardsBuilder(DefaultCards()) ?? [];
+
     var topOpViews = Container(
       height: 50,
+      width: double.infinity,
       decoration: BoxDecoration(
         color: ColorPlate.lightGray,
         border: Border(
           bottom: BorderSide(color: ColorPlate.gray, width: 0.2),
         ),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          _TapBtn(
-            selected: currentIndex == 0,
-            title: 'Log',
-            onTap: () {
-              setState(() {
-                currentIndex = 0;
-              });
-            },
-          ),
-          Container(
-            width: 0.5,
-            height: double.infinity,
-            color: ColorPlate.gray.withOpacity(0.5),
-          ),
-          _TapBtn(
-            selected: currentIndex == 1,
-            title: 'Flow',
-            onTap: () {
-              setState(() {
-                currentIndex = 1;
-              });
-            },
-          ),
-          Container(
-            width: 0.5,
-            height: double.infinity,
-            color: ColorPlate.gray.withOpacity(0.5),
-          ),
-          _TapBtn(
-            selected: currentIndex == 2,
-            title: 'System',
-            onTap: () {
-              setState(() {
-                currentIndex = 2;
-              });
-            },
-          ),
-        ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            for (var index in customCards.asMap().keys.toList())
+              _TapBtn(
+                selected: currentIndex == index,
+                title: customCards[index].name,
+                onTap: () {
+                  setState(() {
+                    currentIndex = index;
+                  });
+                },
+              ),
+          ].fold<List<Widget>>(
+            [],
+            (previousValue, element) => [
+              ...previousValue,
+              element,
+              Container(
+                width: 0.5,
+                height: double.infinity,
+                color: ColorPlate.gray.withOpacity(0.5),
+              ),
+            ],
+          )..removeLast(),
+        ),
       ),
     );
-    var bottomOpViews = Container(
+
+    return Material(
+      color: ColorPlate.black.withOpacity(0.3),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        behavior: HitTestBehavior.translucent,
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: GestureDetector(
+                onTap: () {
+                  widget.onHideTap.call();
+                },
+                behavior: HitTestBehavior.translucent,
+              ),
+            ),
+            Container(
+              alignment: Alignment.bottomCenter,
+              color: ColorPlate.white,
+              width: double.infinity,
+              height: MediaQueryData.fromWindow(window).size.height * 0.8,
+              child: Column(
+                children: <Widget>[
+                  topOpViews,
+                  Expanded(
+                    child: IndexedStack(
+                      index: currentIndex,
+                      children: customCards
+                          .map(
+                            (e) => e.builder(context),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  get isDark =>
+      MediaQueryData.fromWindow(window).platformBrightness == Brightness.dark;
+}
+
+class BottomActionView extends StatelessWidget {
+  const BottomActionView({
+    Key? key,
+    required this.onClear,
+  }) : super(key: key);
+
+  final Function onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
         bottom: MediaQueryData.fromWindow(window).padding.bottom,
@@ -84,14 +136,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
             Expanded(
               child: Tapped(
                 onTap: () {
-                  // TODO: 不能按此判断
-                  if (currentIndex == 0) {
-                    FConsole.instance.clear(true);
-                  }
-                  if (currentIndex == 1) {
-                    FlowCenter.instance.clearAll();
-                  }
-                  setState(() {});
+                  onClear();
                 },
                 child: Container(
                   color: ColorPlate.clear,
@@ -109,7 +154,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
             Expanded(
               child: Tapped(
                 onTap: () {
-                  widget.onHideTap.call();
+                  hideConsolePanel();
                 },
                 child: Container(
                   color: ColorPlate.clear,
@@ -126,52 +171,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
         ),
       ),
     );
-    return Material(
-      color: ColorPlate.black.withOpacity(0.3),
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        behavior: HitTestBehavior.translucent,
-        child: Column(
-          children: <Widget>[
-            Expanded(
-                child: GestureDetector(
-              onTap: () {
-                widget.onHideTap.call();
-              },
-              behavior: HitTestBehavior.translucent,
-            )),
-            Container(
-              alignment: Alignment.bottomCenter,
-              color: ColorPlate.white,
-              width: double.infinity,
-              height: MediaQueryData.fromWindow(window).size.height * 0.8,
-              child: Column(
-                children: <Widget>[
-                  topOpViews,
-                  Expanded(
-                    child: IndexedStack(
-                      index: currentIndex,
-                      children: <Widget>[
-                        LogInfoPannel(),
-                        FlowInfo(),
-                        SystemInfoPannel(),
-                      ],
-                    ),
-                  ),
-                  bottomOpViews
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
-
-  get isDark =>
-      MediaQueryData.fromWindow(window).platformBrightness == Brightness.dark;
 }
 
 /// 选项卡按钮
@@ -313,7 +313,12 @@ class _LogInfoPannelState extends State<LogInfoPannel>
             children: [_LogListView(0), _LogListView(1), _LogListView(2)],
             index: currentIndex,
           ),
-        )
+        ),
+        BottomActionView(
+          onClear: () {
+            FConsole.instance.clear(true);
+          },
+        ),
       ],
     );
   }

@@ -15,7 +15,7 @@ typedef ErrHandler = void Function(
 void runAppWithFConsole(
   Widget app, {
   Future Function()? beforeRun,
-  CustomCardDelegate? delegate,
+  FConsoleCardDelegate? delegate,
   ErrHandler? errHandler,
 }) async {
   FlutterError.onError = (details) {
@@ -61,12 +61,21 @@ void runAppWithFConsole(
   );
 }
 
+enum FConsoleStatus {
+  hide,
+  consoleBtn,
+  panel,
+}
+
 class FConsole extends ChangeNotifier {
   ConsoleOptions options = ConsoleOptions();
 
-  ValueNotifier isShow = ValueNotifier(false);
+  ValueNotifier<FConsoleStatus> status = ValueNotifier(FConsoleStatus.hide);
 
-  CustomCardDelegate? delegate;
+  static bool get isOn => FConsole.instance.status.value != FConsoleStatus.hide;
+  static bool get isOff => !isOn;
+
+  FConsoleCardDelegate? delegate;
 
   List<Log> allLog = [];
   List<Log> errorLog = [];
