@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fconsole/fconsole.dart';
 import 'package:fconsole/src/model/log.dart';
+import 'package:fconsole/src/widget/messages.dart';
 import 'package:flutter/material.dart';
 
 import '../model/log.dart';
@@ -73,6 +74,9 @@ class FConsole extends ChangeNotifier {
 
   static bool get isOn => FConsole.instance.status.value != FConsoleStatus.hide;
   static bool get isOff => !isOn;
+
+  /// show internal message in panel view.
+  static final showMessage = showFconsoleMessage;
 
   FConsoleCardDelegate? delegate;
 

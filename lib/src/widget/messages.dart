@@ -5,7 +5,7 @@ import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
 import 'package:flutter/material.dart';
 
-Function(String) showFconsoleMessage = (str) {};
+void Function(String) showFconsoleMessage = (str) {};
 
 class FconsoleMessageView extends StatefulWidget {
   const FconsoleMessageView({

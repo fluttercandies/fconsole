@@ -13,11 +13,11 @@ void main() => runAppWithFConsole(
 
 class MyCardDelegate extends FConsoleCardDelegate {
   @override
-  List<CustomCard> cardsBuilder(DefaultCards defaultCards) {
+  List<FConsoleCard> cardsBuilder(DefaultCards defaultCards) {
     return [
       defaultCards.logCard,
       defaultCards.flowCard,
-      CustomCard(
+      FConsoleCard(
         name: "my",
         builder: (ctx) => CustomLogPage(),
       ),

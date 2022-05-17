@@ -3,12 +3,12 @@ import 'package:fconsole/src/widget/flow_info.dart';
 import 'package:flutter/material.dart';
 
 abstract class FConsoleCardDelegate {
-  List<CustomCard> cardsBuilder(DefaultCards defaultCards);
+  List<FConsoleCard> cardsBuilder(DefaultCards defaultCards);
 }
 
 class DefaultCardDelegate extends FConsoleCardDelegate {
   @override
-  List<CustomCard> cardsBuilder(DefaultCards defaultCards) {
+  List<FConsoleCard> cardsBuilder(DefaultCards defaultCards) {
     return [
       defaultCards.logCard,
       defaultCards.flowCard,
@@ -18,23 +18,23 @@ class DefaultCardDelegate extends FConsoleCardDelegate {
 }
 
 class DefaultCards {
-  final CustomCard logCard = CustomCard(
+  final FConsoleCard logCard = FConsoleCard(
     name: 'Log',
     builder: (context) => LogInfoPannel(),
   );
-  final CustomCard flowCard = CustomCard(
+  final FConsoleCard flowCard = FConsoleCard(
     name: 'Flow',
     builder: (context) => FlowInfo(),
   );
-  final CustomCard sysInfoCard = CustomCard(
+  final FConsoleCard sysInfoCard = FConsoleCard(
     name: 'System',
     builder: (context) => SystemInfoPannel(),
   );
 }
 
-class CustomCard {
+class FConsoleCard {
   final String name;
   final Widget Function(BuildContext context) builder;
 
-  CustomCard({required this.name, required this.builder});
+  FConsoleCard({required this.name, required this.builder});
 }
