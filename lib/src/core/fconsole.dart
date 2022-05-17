@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fconsole/fconsole.dart';
+import 'package:fconsole/src/delegate/custom_card_delegate.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:flutter/material.dart';
 
@@ -14,12 +15,13 @@ typedef ErrHandler = void Function(
 void runAppWithFConsole(
   Widget app, {
   Future Function()? beforeRun,
+  CustomCardDelegate? delegate,
   ErrHandler? errHandler,
 }) async {
   FlutterError.onError = (details) {
     Zone.current.handleUncaughtError(details.exception, details.stack!);
   };
-
+  FConsole.instance.delegate = delegate ?? DefaultCardDelegate();
   var zoneSpecification = ZoneSpecification(
     print: (
       Zone self,
@@ -64,6 +66,8 @@ class FConsole extends ChangeNotifier {
 
   ValueNotifier isShow = ValueNotifier(false);
 
+  CustomCardDelegate? delegate;
+
   List<Log> allLog = [];
   List<Log> errorLog = [];
   List<Log> verboselog = [];
@@ -84,35 +88,23 @@ class FConsole extends ChangeNotifier {
 
   static log(dynamic log, {bool noPrint = false}) {
     // 有这个参数时，是自己捕获的print，不需要再打印到fconsole
-    if (!noPrint) {
-      print(log);
-      // return;
-    }
-    // if (FConsole.instance.isShow.value == false) {
-    //   return;
-    // }
+    if (!noPrint) print(log);
     if (log != null) {
       Log lg = Log(log, LogType.log);
-      FConsole.instance!.verboselog.add(lg);
-      FConsole.instance!.allLog.add(lg);
-      FConsole.instance!.notifyListeners();
+      FConsole.instance.verboselog.add(lg);
+      FConsole.instance.allLog.add(lg);
+      FConsole.instance.notifyListeners();
     }
   }
 
   static error(dynamic error, {bool noPrint = false}) {
     // 有这个参数时，是自己捕获的print，不需要再打印到fconsole
-    if (!noPrint) {
-      print(error);
-      // return;
-    }
-    // if (FConsole.instance.isShow.value == false) {
-    //   return;
-    // }
+    if (!noPrint) print(error);
     if (error != null) {
       Log lg = Log(error, LogType.error);
-      FConsole.instance!.errorLog.add(lg);
-      FConsole.instance!.allLog.add(lg);
-      FConsole.instance!.notifyListeners();
+      FConsole.instance.errorLog.add(lg);
+      FConsole.instance.allLog.add(lg);
+      FConsole.instance.notifyListeners();
     }
   }
 
@@ -130,21 +122,21 @@ class FConsole extends ChangeNotifier {
         errorLog.clear();
       }
     }
-    FConsole.instance!.notifyListeners();
+    FConsole.instance.notifyListeners();
   }
 
   /// 单例
   static FConsole? _instance;
 
-  factory FConsole() => _getInstance()!;
+  factory FConsole() => _getInstance();
 
-  static FConsole? get instance => _getInstance();
+  static FConsole get instance => _getInstance();
 
-  static FConsole? _getInstance() {
+  static FConsole _getInstance() {
     if (_instance == null) {
       _instance = FConsole._();
     }
-    return _instance;
+    return _instance!;
   }
 
   FConsole._();

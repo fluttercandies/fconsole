@@ -14,7 +14,6 @@ dependencies:
     sdk: flutter
   device_info: ^2.0.0
   intl: ^0.17.0
-  oktoast: ^3.0.0
   tapped: ^2.0.0
   animations: ^2.0.0
   left_scroll_actions: ^2.0.0

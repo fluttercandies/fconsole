@@ -68,7 +68,8 @@ class _ConsolePanelState extends State<ConsolePanel> {
     var bottomOpViews = Container(
       width: double.infinity,
       padding: EdgeInsets.only(
-          bottom: MediaQueryData.fromWindow(window).padding.bottom),
+        bottom: MediaQueryData.fromWindow(window).padding.bottom,
+      ),
       decoration: BoxDecoration(
         color: ColorPlate.lightGray,
         border: Border(
@@ -83,11 +84,12 @@ class _ConsolePanelState extends State<ConsolePanel> {
             Expanded(
               child: Tapped(
                 onTap: () {
+                  // TODO: 不能按此判断
                   if (currentIndex == 0) {
-                    FConsole.instance!.clear(true);
+                    FConsole.instance.clear(true);
                   }
                   if (currentIndex == 1) {
-                    FlowCenter.instance!.clearAll();
+                    FlowCenter.instance.clearAll();
                   }
                   setState(() {});
                 },
@@ -225,7 +227,7 @@ class _LogInfoPannelState extends State<LogInfoPannel>
 
   set currentIndex(int index) {
     _currentTabIndex = index;
-    FConsole.instance!.currentLogIndex = _currentTabIndex;
+    FConsole.instance.currentLogIndex = _currentTabIndex;
   }
 
   @override
@@ -322,12 +324,9 @@ extension _LogColor on Log {
     switch (this.type) {
       case LogType.log:
         return ColorPlate.darkGray;
-        break;
       case LogType.error:
         return ColorPlate.red;
-        break;
     }
-    return ColorPlate.darkGray;
   }
 }
 
@@ -349,20 +348,20 @@ class __LogListViewState extends State<_LogListView> {
   initState() {
     super.initState();
     currentIndex = widget.currentIndex;
-    logs = FConsole.instance!.logListOfType(currentIndex);
-    FConsole.instance!.addListener(_didUpdateLog);
+    logs = FConsole.instance.logListOfType(currentIndex);
+    FConsole.instance.addListener(_didUpdateLog);
   }
 
   @override
   dispose() {
     super.dispose();
-    FConsole.instance!.removeListener(_didUpdateLog);
+    FConsole.instance.removeListener(_didUpdateLog);
     _filterTEC.dispose();
   }
 
   _didUpdateLog() {
     setState(() {
-      logs = FConsole.instance!.logListOfType(currentIndex);
+      logs = FConsole.instance.logListOfType(currentIndex);
     });
   }
 
@@ -389,7 +388,8 @@ class __LogListViewState extends State<_LogListView> {
                           text: newlogs[index].toString(),
                         ),
                       );
-                      showToast("Copy Success");
+                      // TODO:
+                      // showToast("Copy Success");
                     },
                     child: Container(
                       width: double.infinity,
@@ -414,7 +414,7 @@ class __LogListViewState extends State<_LogListView> {
                               ),
                             ),
                           ),
-                          if (FConsole.instance!.options.showTime)
+                          if (FConsole.instance.options.showTime)
                             Container(
                               padding: EdgeInsets.symmetric(
                                 horizontal: 6,
@@ -443,9 +443,9 @@ class __LogListViewState extends State<_LogListView> {
   }
 
   String time(Log log) {
-    if (FConsole.instance!.options.showTime) {
-      return DateFormat(FConsole.instance!.options.timeFormat)
-              .format(log.dateTime!);
+    if (FConsole.instance.options.showTime) {
+      return DateFormat(FConsole.instance.options.timeFormat)
+          .format(log.dateTime!);
     }
     return "";
   }

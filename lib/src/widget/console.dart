@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'dart:io';
 import 'dart:ui';
 import 'package:fconsole/fconsole.dart';
-import 'package:fconsole/src/core/fconsole.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
@@ -13,7 +12,6 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' hide TextDirection;
-import 'package:oktoast/oktoast.dart';
 import 'package:tapped/tapped.dart';
 
 part 'console_panel.dart';
@@ -26,8 +24,8 @@ OverlayEntry? consoleEntry;
 
 ///show console btn
 void showConsole({BuildContext? context}) {
-  if (!FConsole.instance!.isShow.value) {
-    FConsole.instance!.isShow.value = true;
+  if (!FConsole.instance.isShow.value) {
+    FConsole.instance.isShow.value = true;
     context ??= _contextMap.values.first;
     _ConsoleTheme _consoleTheme = _ConsoleTheme.of(context)!;
     Widget consoleBtn = _consoleTheme.consoleBtn ?? _consoleBtn();
@@ -47,8 +45,8 @@ void showConsole({BuildContext? context}) {
 
 ///hide console btn
 void hideConsole({BuildContext? context}) {
-  if (consoleEntry != null && FConsole.instance!.isShow.value) {
-    FConsole.instance!.isShow.value = false;
+  if (consoleEntry != null && FConsole.instance.isShow.value) {
+    FConsole.instance.isShow.value = false;
     consoleEntry!.remove();
     consoleEntry = null;
   }
@@ -108,16 +106,15 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
 
   initState() {
     super.initState();
-    FConsole.instance!.options = widget.options ?? ConsoleOptions();
+    FConsole.instance.options = widget.options ?? ConsoleOptions();
     WidgetsBinding.instance!.addPostFrameCallback((d) {
-      if (FConsole.instance!.options.displayMode == ConsoleDisplayMode.Always) {
+      if (FConsole.instance.options.displayMode == ConsoleDisplayMode.Always) {
         showConsole();
       }
     });
   }
 
   Widget build(BuildContext context) {
-    /// TODO: i18n功能存疑
     var mediaQuery = MediaQuery(
       /// 移除顶部安全区
       data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
@@ -159,7 +156,6 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
   }
 }
 
-/// TODO: 功能存疑
 class _ConsoleTheme extends InheritedWidget {
   final Widget? consoleBtn;
   final Widget child;

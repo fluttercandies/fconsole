@@ -57,7 +57,7 @@ class FlowLog {
   })  : createdAt = DateTime.now(),
         this.timeout = timeout ?? const Duration(seconds: 30) {
     logs ??= [];
-    FlowCenter.instance!.workingFlow[name + id] = this;
+    FlowCenter.instance.workingFlow[name + id] = this;
   }
 
   DateTime? get latestTime {
@@ -95,7 +95,7 @@ class FlowLog {
       });
     }
     this.logs!.add(log);
-    FlowCenter.instance!._notify();
+    FlowCenter.instance._notify();
   }
 
   /// 添加一个常规log
@@ -122,7 +122,7 @@ class FlowLog {
     timer = null;
     _endAt = DateTime.now();
     // 拷贝一份去
-    FlowCenter.instance!.flowList.add(FlowLog._(
+    FlowCenter.instance.flowList.add(FlowLog._(
       name: name,
       logs: List.from(logs!),
       timeout: timeout,
@@ -131,9 +131,9 @@ class FlowLog {
     ));
     this.createdAt = DateTime.now();
     this._endAt = null;
-    FlowCenter.instance!.workingFlow.remove(name + id);
+    FlowCenter.instance.workingFlow.remove(name + id);
     this.logs!.clear();
-    FlowCenter.instance!._notify();
+    FlowCenter.instance._notify();
   }
 
   FlowLogDesc get desc {
@@ -159,11 +159,11 @@ class FlowLog {
   }
 
   String get startTimeText =>
-      DateFormat(FConsole.instance!.options.timeFormat).format(createdAt!);
+      DateFormat(FConsole.instance.options.timeFormat).format(createdAt!);
 
   String get endTimeText => endAt == null
       ? 'null'
-      : DateFormat(FConsole.instance!.options.timeFormat).format(endAt!);
+      : DateFormat(FConsole.instance.options.timeFormat).format(endAt!);
 
   String get shareText => [
         if (logs!.isNotEmpty) "Time: ${logs!.first.dateTime}",
@@ -191,13 +191,13 @@ class FlowLog {
 
   /// 通过name获取一个正在进行的Flow，如果flow还没有创建，那么就创建一个新的再返回
   static FlowLog of(String name, [Duration? initTimeOut]) {
-    if (FlowCenter.instance!.workingFlow[name] == null) {
-      FlowCenter.instance!.workingFlow[name] = FlowLog(
+    if (FlowCenter.instance.workingFlow[name] == null) {
+      FlowCenter.instance.workingFlow[name] = FlowLog(
         name: name,
         timeout: initTimeOut,
       );
     }
-    return FlowCenter.instance!.workingFlow[name]!;
+    return FlowCenter.instance.workingFlow[name]!;
   }
 
   /// 通过name获取一个正在进行的Flow，如果flow还没有创建，那么就创建一个新的再返回
@@ -207,14 +207,14 @@ class FlowLog {
     Duration? initTimeOut,
     String id = '',
   }) {
-    if (FlowCenter.instance!.workingFlow[name + id] == null) {
-      FlowCenter.instance!.workingFlow[name + id] = FlowLog(
+    if (FlowCenter.instance.workingFlow[name + id] == null) {
+      FlowCenter.instance.workingFlow[name + id] = FlowLog(
         name: name,
         timeout: initTimeOut,
         id: id,
       );
     }
-    return FlowCenter.instance!.workingFlow[name + id]!;
+    return FlowCenter.instance.workingFlow[name + id]!;
   }
 
   @override
@@ -241,7 +241,7 @@ class FlowCenter extends ChangeNotifier {
 
   // 工厂模式
   factory FlowCenter() => _getInstance()!;
-  static FlowCenter? get instance => _getInstance();
+  static FlowCenter get instance => _getInstance()!;
   static FlowCenter? _instance;
   FlowCenter._internal() {
     // 初始化

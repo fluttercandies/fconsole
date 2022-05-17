@@ -99,7 +99,7 @@ class _MyAppState extends State<MyApp> {
                 text: '原生Throw',
                 right: Container(),
                 onTap: () {
-                  var a = [][123];
+                  var _ = [][123];
                   throw '${DateTime.now().toIso8601String()}';
                 },
               ),

@@ -1,8 +1,8 @@
 import 'package:animations/animations.dart';
 import 'package:fconsole/fconsole.dart';
-import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
+import 'package:fconsole/src/widget/flow_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:left_scroll_actions/left_scroll_actions.dart';
 import 'package:share/share.dart';
@@ -22,10 +22,10 @@ class _FlowInfoState extends State<FlowInfo> {
 
   List<FlowLog> get currentList {
     if (currentIndex == 0) {
-      return FlowCenter.instance!.flowList.reversed.toList();
+      return FlowCenter.instance.flowList.reversed.toList();
     }
     if (currentIndex == 1) {
-      return FlowCenter.instance!.workingFlow.values.toList().reversed.toList();
+      return FlowCenter.instance.workingFlow.values.toList().reversed.toList();
     }
     return [];
   }
@@ -33,12 +33,12 @@ class _FlowInfoState extends State<FlowInfo> {
   @override
   initState() {
     super.initState();
-    FlowCenter.instance!.addListener(_didUpdateLog);
+    FlowCenter.instance.addListener(_didUpdateLog);
   }
 
   @override
   dispose() {
-    FlowCenter.instance!.removeListener(_didUpdateLog);
+    FlowCenter.instance.removeListener(_didUpdateLog);
     super.dispose();
   }
 
@@ -62,7 +62,7 @@ class _FlowInfoState extends State<FlowInfo> {
           _TapBtn(
             selected: currentIndex == 0,
             small: true,
-            title: "Done(${FlowCenter.instance!.flowList.length})",
+            title: "Done(${FlowCenter.instance.flowList.length})",
             onTap: () {
               setState(() {
                 currentIndex = 0;
@@ -77,7 +77,7 @@ class _FlowInfoState extends State<FlowInfo> {
           _TapBtn(
             selected: currentIndex == 1,
             small: true,
-            title: "Processing(${FlowCenter.instance!.workingFlow.length})",
+            title: "Processing(${FlowCenter.instance.workingFlow.length})",
             space: 12,
             onTap: () {
               setState(() {
@@ -130,169 +130,6 @@ class _FlowInfoState extends State<FlowInfo> {
     return AnimatedSwither(
       reverse: isDetailPage,
       child: isDetailPage ? detailPage : tablePage,
-    );
-  }
-}
-
-/// 查看一个Flow log的详情
-class FlowLogDetailPage extends StatelessWidget {
-  final FlowLog? log;
-  final Function? onBack;
-
-  const FlowLogDetailPage({
-    Key? key,
-    required this.log,
-    this.onBack,
-  }) : super(key: key);
-
-  FlowLog get flowLog => log!;
-
-  @override
-  Widget build(BuildContext context) {
-    if (log == null) return Container();
-
-    return Container(
-      child: Column(
-        children: [
-          Container(
-            color: ColorPlate.white,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _ActBtn(
-                  onTap: onBack,
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    size: 16,
-                    color: ColorPlate.darkGray,
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                    ),
-                    child: StText.normal(flowLog.name),
-                  ),
-                ),
-                _ActBtn(
-                  onTap: () {
-                    Share.share(flowLog.shareText);
-                  },
-                  right: true,
-                  child: Icon(
-                    Icons.share,
-                    size: 16,
-                    color: ColorPlate.darkGray,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            height: .5,
-            color: ColorPlate.gray.withOpacity(0.5),
-          ),
-          Expanded(
-            child: Container(
-              alignment: Alignment.topCenter,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: flowLog.logs!.length,
-                itemBuilder: (context, index) {
-                  var l = flowLog.logs!;
-                  var log = l[index];
-                  var endTime = flowLog
-                      .logs![(index - 1).clamp(
-                    0,
-                    l.length - 1,
-                  )]
-                      .dateTime!;
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    decoration: BoxDecoration(
-                      color: ColorPlate.white,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: ColorPlate.lightGray,
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: StText.normal(
-                            "${log.log}",
-                            style: TextStyle(
-                              color: log.type == LogType.error
-                                  ? ColorPlate.red
-                                  : null,
-                            ),
-                          ),
-                        ),
-                        StText.normal(
-                          "+${endTime.difference(log.dateTime!).inMilliseconds.abs()}ms",
-                          style: TextStyle(
-                            color: log.type == LogType.error
-                                ? ColorPlate.red
-                                : null,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ActBtn extends StatelessWidget {
-  const _ActBtn({
-    Key? key,
-    required this.onTap,
-    this.child,
-    this.right: false,
-  }) : super(key: key);
-
-  final bool right;
-  final Widget? child;
-  final Function? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Tapped(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 12,
-        ),
-        decoration: BoxDecoration(
-          color: ColorPlate.white,
-          border: right
-              ? Border(
-                  left: BorderSide(
-                    color: ColorPlate.gray.withOpacity(.5),
-                    width: .5,
-                  ),
-                )
-              : Border(
-                  right: BorderSide(
-                    color: ColorPlate.gray.withOpacity(.5),
-                    width: .5,
-                  ),
-                ),
-        ),
-        child: child,
-      ),
     );
   }
 }

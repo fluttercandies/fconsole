@@ -23,10 +23,4 @@ class _Console {
           .join(','),
     );
   }
-
-  /// TODO: 计时
-  // void timeStart(String tag) {}
-
-  /// TODO: 计时结束
-  // void timeEnd(String tag) {}
 }
