@@ -5,7 +5,7 @@ import 'package:fconsole/src/style/text.dart';
 import 'package:fconsole/src/widget/flow_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:left_scroll_actions/left_scroll_actions.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:tapped/tapped.dart';
 
 class FlowInfo extends StatefulWidget {

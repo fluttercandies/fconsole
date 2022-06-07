@@ -5,7 +5,7 @@ import 'package:fconsole/src/style/text.dart';
 import 'package:fconsole/src/widget/messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:tapped/tapped.dart';
 
 /// 查看一个Flow log的详情

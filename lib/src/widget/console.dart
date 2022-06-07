@@ -1,16 +1,14 @@
 import 'dart:collection';
 import 'dart:io';
 import 'dart:ui';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fconsole/fconsole.dart';
-import 'package:fconsole/src/delegate/custom_card_delegate.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
 import 'package:fconsole/src/style/text.dart';
-import 'package:fconsole/src/widget/flow_info.dart';
 import 'package:fconsole/src/widget/messages.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' hide TextDirection;
