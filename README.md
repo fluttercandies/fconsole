@@ -9,16 +9,26 @@
 - 使用 FlowLog 可记录流程事件，网络 Log 清晰可见
 - 分享完整 FlowLog 网络请求，一键反馈(甩锅)后端报错
 
+## 截图
+
+<figure class="third">
+    <img src="./screenshot/log.PNG" width="280">
+    <img src="./screenshot/flow.PNG" width="280">
+    <img src="./screenshot/flow-detail.PNG" width="280">
+</figure>
+
 ## 使用
 
-你需要将`ConsoleWidget`嵌套在`MaterialApp`外
-
 ```dart
-ConsoleWidget(
-  child: MaterialApp(
-    home: Scaffold(),
-  ),
-)
+// 同时拦截原生 print 函数和未捕获的异常
+void main() => runAppWithFConsole(
+      MyApp(),
+      delegate: MyCardDelegate(),
+      beforeRun: () async {
+        WidgetsFlutterBinding.ensureInitialized();
+        // Do some init before runApp
+      }
+    );
 ```
 
 然后才可以使用下列方法：
@@ -74,7 +84,7 @@ class CustomLogPage extends StatelessWidget {
 }
 ```
 
-若要显示 toast 信息，你可以使用 oktoast，FConsole 另外提供了一个内部使用的方法：
+卡片内无法使用OKToast，若要显示 toast 信息，FConsole提供了一个showMessage方法：
 
 ```dart
 FConsole.showMessage("Copy Success");

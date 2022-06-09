@@ -1,3 +1,6 @@
+## 2.1.1
+- Update readme.
+
 ## 2.1.0
 - Update device_info and share plugins to plus version to support more platform.
 ## 2.0.0
