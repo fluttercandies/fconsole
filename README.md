@@ -11,12 +11,9 @@
 
 ## 截图
 
-<figure class="third">
-    <img src="./screenshot/log.PNG" width="280">
-    <img src="./screenshot/flow.PNG" width="280">
-    <img src="./screenshot/flow-detail.PNG" width="280">
-</figure>
-
+![](./screenshot/log.PNG)
+![](./screenshot/flow.PNG)
+![](./screenshot/flow-detail.PNG)
 ## 使用
 
 ```dart
