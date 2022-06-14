@@ -12,7 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:tapped/tapped.dart';
 
 /// 查看一个Flow log的详情
-class FlowLogDetailPage extends StatelessWidget {
+class FlowLogDetailPage extends StatefulWidget {
   final FlowLog? log;
   final Function? onBack;
 
@@ -22,11 +22,18 @@ class FlowLogDetailPage extends StatelessWidget {
     this.onBack,
   }) : super(key: key);
 
-  FlowLog get flowLog => log!;
+  @override
+  State<FlowLogDetailPage> createState() => _FlowLogDetailPageState();
+}
+
+class _FlowLogDetailPageState extends State<FlowLogDetailPage> {
+  FlowLog get flowLog => widget.log!;
+
+  Map<int, bool> isJsonViewMap = {};
 
   @override
   Widget build(BuildContext context) {
-    if (log == null) return Container();
+    if (widget.log == null) return Container();
 
     return Container(
       child: Column(
@@ -37,7 +44,7 @@ class FlowLogDetailPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _ActBtn(
-                  onTap: onBack,
+                  onTap: widget.onBack,
                   child: Icon(
                     Icons.arrow_back_ios,
                     size: 16,
@@ -116,46 +123,62 @@ class FlowLogDetailPage extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          if (!log.isJson)
-                            Expanded(
-                              flex: 4,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 12),
-                                child: StText.normal(
-                                  "${log.log}",
-                                  style: TextStyle(
-                                    color: log.type == LogType.error
-                                        ? ColorPlate.red
-                                        : null,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          if (log.isJson)
-                            Expanded(
-                              flex: 4,
-                              child: Container(
-                                margin: EdgeInsets.symmetric(vertical: 6),
-                                constraints: BoxConstraints(
-                                  maxHeight: 400,
-                                ),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    right: BorderSide(
-                                      color: ColorPlate.lightGray,
+                          Expanded(
+                            flex: 4,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 6),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (log.isJson)
+                                    _TypeSwitch(
+                                      isJson: isJsonViewMap[index] == true,
+                                      onChange: (v) {
+                                        setState(() {
+                                          isJsonViewMap[index] = v;
+                                        });
+                                      },
                                     ),
-                                  ),
-                                ),
-                                child: JsonView(
-                                  padding: EdgeInsets.symmetric(vertical: 6),
-                                  shrinkWrap: true,
-                                  json: log.log,
-                                ),
+                                  if (isJsonViewMap[index] != true)
+                                    Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 8),
+                                      child: StText.normal(
+                                        "${log.log}",
+                                        style: TextStyle(
+                                          color: log.type == LogType.error
+                                              ? ColorPlate.red
+                                              : null,
+                                        ),
+                                      ),
+                                    ),
+                                  if (isJsonViewMap[index] == true)
+                                    Container(
+                                      constraints: BoxConstraints(
+                                        maxHeight: 480,
+                                      ),
+                                      margin: EdgeInsets.only(top: 6),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: ColorPlate.lightGray),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Scrollbar(
+                                        child: JsonView(
+                                          padding:
+                                              EdgeInsets.symmetric(vertical: 6),
+                                          shrinkWrap: true,
+                                          json: log.log,
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
+                          ),
                           Container(
                             constraints: BoxConstraints(
-                              minWidth: 74,
+                              minWidth: 64,
                             ),
                             alignment: Alignment.centerRight,
                             child: StText.normal(
@@ -172,6 +195,67 @@ class FlowLogDetailPage extends StatelessWidget {
                     ),
                   );
                 },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TypeSwitch extends StatelessWidget {
+  const _TypeSwitch({
+    Key? key,
+    required this.isJson,
+    required this.onChange,
+  }) : super(key: key);
+
+  final bool isJson;
+  final Function(bool) onChange;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100,
+      decoration: BoxDecoration(
+        color: ColorPlate.lightGray,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      padding: EdgeInsets.all(2),
+      child: Row(
+        children: [
+          Expanded(
+            child: Tapped(
+              onTap: () => onChange.call(false),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 6,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: !isJson ? ColorPlate.white : ColorPlate.lightGray,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                alignment: Alignment.center,
+                child: StText.small('Raw'),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Tapped(
+              onTap: () => onChange.call(true),
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 6,
+                  vertical: 2,
+                ),
+                decoration: BoxDecoration(
+                  color: isJson ? ColorPlate.white : ColorPlate.lightGray,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                alignment: Alignment.center,
+                child: StText.small('JSON'),
               ),
             ),
           ),
