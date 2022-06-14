@@ -104,9 +104,7 @@ class FlowLog {
   }
 
   /// 添加一个常规log
-  add(dynamic log) {
-    this._addRawLog(Log(log, LogType.log));
-  }
+  add(dynamic log) => this.log(log);
 
   /// 添加一个Error log
   error(dynamic log) {

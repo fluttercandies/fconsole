@@ -141,10 +141,28 @@ class _MyAppState extends State<MyApp> {
                 right: Slider(
                   value: slideValue,
                   onChanged: (v) {
+                    // FlowLog.of(
+                    //   '滑动Slider',
+                    //   Duration(seconds: 2),
+                    // ).log('Value: $v');
                     FlowLog.of(
                       '滑动Slider',
                       Duration(seconds: 2),
-                    ).log('Value: $v');
+                    ).log({
+                      'type': 'slide',
+                      "value": [
+                        for (var i = 0; i < 100; i++)
+                          {
+                            "value": {
+                              "value": {
+                                "value": {
+                                  "value": "$v",
+                                },
+                              },
+                            },
+                          },
+                      ],
+                    });
                     setState(() {
                       slideValue = v;
                     });

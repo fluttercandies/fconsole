@@ -1,3 +1,6 @@
+## 2.2.0
+- Support JSON tree view and JSON copy in flow log.
+- Update readme.
 ## 2.1.2
 - Update readme.
 

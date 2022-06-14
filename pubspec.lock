@@ -147,6 +147,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
+  json_view:
+    dependency: "direct main"
+    description:
+      name: json_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   left_scroll_actions:
     dependency: "direct main"
     description:

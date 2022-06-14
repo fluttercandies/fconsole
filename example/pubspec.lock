@@ -112,7 +112,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.0.0"
+    version: "2.2.0"
   ffi:
     dependency: transitive
     description:
@@ -161,6 +161,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
+  json_view:
+    dependency: transitive
+    description:
+      name: json_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0"
   left_scroll_actions:
     dependency: transitive
     description:

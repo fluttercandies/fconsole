@@ -6,14 +6,14 @@
 
 - 显示悬浮窗，随时打开 Log 页面
 - 可自定义页面插入，项目专属调试页不用藏
-- 使用 FlowLog 可记录流程事件，网络 Log 清晰可见
+- 使用 FlowLog 可记录流程事件，网络 Log 清晰可见(支持json树状展示)
 - 分享完整 FlowLog 网络请求，一键反馈(甩锅)后端报错
 
 ## 截图
+|  Log   | Flow  | Flow Detail  |
+|  ----  | ----  | ----  |
+| ![](./screenshot/log.PNG)  | ![](./screenshot/flow.PNG) | ![](./screenshot/flow-detail.PNG) |
 
-![](./screenshot/log.PNG)
-![](./screenshot/flow.PNG)
-![](./screenshot/flow-detail.PNG)
 ## 使用
 
 ```dart
@@ -130,6 +130,7 @@ SettingRow(
 FConsole.log("打印了一行log");
 FConsole.log("打印了一行log");
 FConsole.log("打印了一行log");
+FConsole.log("打印了一行log");
 // 添加error
 FConsole.error("打印了一行error");
 FConsole.error("打印了一行error");
@@ -139,7 +140,7 @@ FConsole.error("打印了一行error");
 
 然后就可以在 FConsole 内查看 log 记录。
 
-### 创建 FlowLog(未完成)
+### 创建 FlowLog(支持JSON)
 
 可以使用`FlowLog`的形式记录 Log:
 
@@ -152,6 +153,7 @@ FlowLog.of('分享启动').log('查询分享信息2 成功');
 FlowLog.of('分享启动').log('获取到分享值3 $shareId');
 FlowLog.of('分享启动').log('查询分享信息3 成功');
 FlowLog.of('分享启动').log('获取到分享值4 $shareId');
+FlowLog.of('分享启动').log(map);// 传入Map/List将会以json形式展示
 FlowLog.of('分享启动').error('查询分享信息4错误: $map');
 FlowLog.of('分享启动').end();
 ```
@@ -177,7 +179,13 @@ FlowLog 的优势在于，在同一页面上的操作可以分开记录，不会
 Tips: 使用“Share”可分享完整网络请求，一键反馈(甩锅)后端报错。
 
 ```dart
- _http = Dio();
+extension _GetLogID on RequestOptions {
+  String get logId {
+    return '[$method]${uri.path}';
+  }
+}
+
+_http = Dio();
 _http!.interceptors.add(InterceptorsWrapper(
   onRequest: (RequestOptions options, handler) {
     var _logger = FlowLog.ofNameAndId(

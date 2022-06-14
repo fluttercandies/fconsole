@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fconsole/src/model/flow.dart';
 import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/style/color.dart';
@@ -5,6 +7,7 @@ import 'package:fconsole/src/style/text.dart';
 import 'package:fconsole/src/widget/messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:json_view/json_view.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:tapped/tapped.dart';
 
@@ -83,17 +86,25 @@ class FlowLogDetailPage extends StatelessWidget {
                   var endTime = flowLog.logs![_index].dateTime!;
                   return GestureDetector(
                     onLongPress: () {
-                      Clipboard.setData(
-                        ClipboardData(
-                          text: "${log.log}",
-                        ),
-                      );
-                      showFconsoleMessage("Copy Success");
+                      if (log.isJson) {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: json.encode(log.log),
+                          ),
+                        );
+                        showFconsoleMessage("JSON Copy Success");
+                      } else {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text: "${log.log}",
+                          ),
+                        );
+                        showFconsoleMessage("Copy Success");
+                      }
                     },
                     child: Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: 16,
-                        vertical: 12,
                       ),
                       decoration: BoxDecoration(
                         color: ColorPlate.white,
@@ -105,22 +116,55 @@ class FlowLogDetailPage extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          Expanded(
+                          if (!log.isJson)
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                child: StText.normal(
+                                  "${log.log}",
+                                  style: TextStyle(
+                                    color: log.type == LogType.error
+                                        ? ColorPlate.red
+                                        : null,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          if (log.isJson)
+                            Expanded(
+                              flex: 4,
+                              child: Container(
+                                margin: EdgeInsets.symmetric(vertical: 6),
+                                constraints: BoxConstraints(
+                                  maxHeight: 400,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    right: BorderSide(
+                                      color: ColorPlate.lightGray,
+                                    ),
+                                  ),
+                                ),
+                                child: JsonView(
+                                  padding: EdgeInsets.symmetric(vertical: 6),
+                                  shrinkWrap: true,
+                                  json: log.log,
+                                ),
+                              ),
+                            ),
+                          Container(
+                            constraints: BoxConstraints(
+                              minWidth: 74,
+                            ),
+                            alignment: Alignment.centerRight,
                             child: StText.normal(
-                              "${log.log}",
+                              "+${endTime.difference(log.dateTime!).inMilliseconds.abs()}ms",
                               style: TextStyle(
                                 color: log.type == LogType.error
                                     ? ColorPlate.red
                                     : null,
                               ),
-                            ),
-                          ),
-                          StText.normal(
-                            "+${endTime.difference(log.dateTime!).inMilliseconds.abs()}ms",
-                            style: TextStyle(
-                              color: log.type == LogType.error
-                                  ? ColorPlate.red
-                                  : null,
                             ),
                           ),
                         ],
