@@ -1,3 +1,6 @@
+## 2.3.0
+- Update device_info_plus version.
+
 ## 2.2.1
 - Improve JSON View in flow log.
 
