@@ -1,3 +1,6 @@
+## 2.3.1
+- Update device_info_plus version.
+
 ## 2.3.0
 - Update device_info_plus version.
 
