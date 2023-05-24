@@ -1,17 +1,30 @@
+## 2.4.0
+
+- Always keep moveable fconsole bubble in safearea now.
+- Add stack trance info to default catch.
+- Can view and copy stack trace info of error log now.
+
 ## 2.3.0
+
 - Update device_info_plus version.
 
 ## 2.2.1
+
 - Improve JSON View in flow log.
 
 ## 2.2.0
+
 - Support JSON tree view and JSON copy in flow log.
 - Update readme.
+
 ## 2.1.2
+
 - Update readme.
 
 ## 2.1.0
+
 - Update device_info and share plugins to plus version to support more platform.
+
 ## 2.0.0
 
 - Removed oktoast.
