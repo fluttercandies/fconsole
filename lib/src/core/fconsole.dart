@@ -19,11 +19,10 @@ void runAppWithFConsole(
   ErrHandler? errHandler,
 }) async {
   FlutterError.onError = (details) {
-    if (details.stack != null)
-      Zone.current.handleUncaughtError(
-        details.exception,
-        details.stack!,
-      );
+    Zone.current.handleUncaughtError(
+      details.exception,
+      details.stack ?? StackTrace.current,
+    );
   };
   FConsole.instance.delegate = delegate ?? DefaultCardDelegate();
   var zoneSpecification = ZoneSpecification(
