@@ -3,6 +3,8 @@
 - Always keep moveable fconsole bubble in safearea now.
 - Add stack trance info to default catch.
 - Can view and copy stack trace info of error log now.
+## 2.3.1
+- Update device_info_plus version.
 
 ## 2.3.0
 
