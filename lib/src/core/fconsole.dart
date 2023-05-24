@@ -19,7 +19,11 @@ void runAppWithFConsole(
   ErrHandler? errHandler,
 }) async {
   FlutterError.onError = (details) {
-    Zone.current.handleUncaughtError(details.exception, details.stack!);
+    if (details.stack != null)
+      Zone.current.handleUncaughtError(
+        details.exception,
+        details.stack!,
+      );
   };
   FConsole.instance.delegate = delegate ?? DefaultCardDelegate();
   var zoneSpecification = ZoneSpecification(
@@ -39,7 +43,6 @@ void runAppWithFConsole(
       Object error,
       StackTrace stackTrace,
     ) {
-      // TODO: 堆栈错误可处理
       FConsole.error(error, noPrint: true);
       Zone.root.print('$error');
       errHandler?.call(self, parent, zone, error, stackTrace);
@@ -109,11 +112,14 @@ class FConsole extends ChangeNotifier {
     }
   }
 
-  static error(dynamic error, {bool noPrint = false}) {
+  static error(dynamic error, {StackTrace? stackTrace, bool noPrint = false}) {
     // 有这个参数时，是自己捕获的print，不需要再打印到fconsole
     if (!noPrint) print(error);
     if (error != null) {
-      Log lg = Log(error, LogType.error);
+      if (error is Error && stackTrace == null) {
+        stackTrace = error.stackTrace;
+      }
+      Log lg = Log(error, LogType.error, stackTrace: stackTrace);
       FConsole.instance.errorLog.add(lg);
       FConsole.instance.allLog.add(lg);
       FConsole.instance.notifyListeners();

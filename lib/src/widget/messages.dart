@@ -95,7 +95,7 @@ class _MsgTagState extends State<_MsgTag> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((s) {
+    WidgetsBinding.instance.addPostFrameCallback((s) {
       setState(() {
         isShow = true;
       });

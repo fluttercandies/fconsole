@@ -6,12 +6,14 @@ enum LogType {
 class Log {
   final dynamic log;
   final LogType type;
+  final StackTrace? stackTrace;
   DateTime? dateTime;
 
   Log(
     this.log,
-    this.type,
-  ) {
+    this.type, {
+    this.stackTrace,
+  }) {
     dateTime = DateTime.now();
   }
 
@@ -19,6 +21,7 @@ class Log {
 
   @override
   String toString() {
-    return log.toString();
+    var logText = log.toString();
+    return logText;
   }
 }

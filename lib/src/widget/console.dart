@@ -108,7 +108,7 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
   initState() {
     super.initState();
     FConsole.instance.options = widget.options ?? ConsoleOptions();
-    WidgetsBinding.instance!.addPostFrameCallback((d) {
+    WidgetsBinding.instance.addPostFrameCallback((d) {
       if (FConsole.instance.options.displayMode == ConsoleDisplayMode.Always) {
         showConsole();
       }

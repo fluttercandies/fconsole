@@ -48,7 +48,7 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((d) {
+    WidgetsBinding.instance.addPostFrameCallback((d) {
       Size? childSize = _childGK.currentContext!.size;
       setState(() {
         childWidth = childSize!.width;
@@ -77,6 +77,7 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
     } else if (yPosition > height - childHeight) {
       yPosition = height - childHeight;
     }
+    yPosition = yPosition.clamp(20, yPosition);
   }
 
   @override
@@ -170,8 +171,16 @@ class _TouchMoveState extends State<_TouchMoveView> {
   Widget build(BuildContext context) {
     double width = MediaQueryData.fromWindow(window).size.width;
     double height = MediaQueryData.fromWindow(window).size.height;
+
+    /// keep safe area
+    double top = MediaQueryData.fromWindow(window).padding.top;
+    double btm = MediaQueryData.fromWindow(window).padding.bottom;
+    var _yPosition = yPosition;
+    if (_yPosition < top) _yPosition = top;
+    if (_yPosition > height - btm) _yPosition = height - btm;
+
     return Transform.translate(
-        offset: Offset(xPosition, yPosition),
+        offset: Offset(xPosition, _yPosition),
         child: GestureDetector(
           onTap: () {
             widget.onTap?.call();

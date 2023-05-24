@@ -384,16 +384,25 @@ class __LogListViewState extends State<_LogListView> {
             itemCount: newlogs.length,
             reverse: true,
             itemBuilder: (ctx, index) {
+              var log = newlogs[index];
               return Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   GestureDetector(
+                    onTap: () {
+                      if (log.stackTrace != null)
+                        showFconsoleMessage(
+                          'Stack Trace:\n${log.stackTrace!.toString()}',
+                        );
+                    },
                     onLongPress: () {
+                      var logText = log.toString();
+                      var stackTrace = log.stackTrace;
+                      if (stackTrace != null)
+                        logText += '\nStack Trace:\n$stackTrace';
                       Clipboard.setData(
-                        ClipboardData(
-                          text: newlogs[index].toString(),
-                        ),
+                        ClipboardData(text: logText),
                       );
                       showFconsoleMessage("Copy Success");
                     },
@@ -407,6 +416,12 @@ class __LogListViewState extends State<_LogListView> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
+                          if (log.stackTrace != null)
+                            Icon(
+                              Icons.bug_report,
+                              color: ColorPlate.red,
+                              size: 16,
+                            ),
                           Expanded(
                             child: Container(
                               padding: EdgeInsets.symmetric(
