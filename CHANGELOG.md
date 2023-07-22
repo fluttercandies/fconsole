@@ -1,3 +1,7 @@
+## 2.5.0
+- Update example to null-safety.
+- Update intl version to any.
+
 ## 2.4.0
 
 - Always keep moveable fconsole bubble in safearea now.
