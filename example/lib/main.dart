@@ -27,7 +27,7 @@ class MyCardDelegate extends FConsoleCardDelegate {
 }
 
 class CustomLogPage extends StatelessWidget {
-  const CustomLogPage({Key key}) : super(key: key);
+  const CustomLogPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -204,16 +204,16 @@ class _MyAppState extends State<MyApp> {
 }
 
 class SettingRow extends StatelessWidget {
-  final double padding;
-  final IconData icon;
-  final Widget right;
-  final Widget beforeRight;
-  final String text;
-  final Color textColor;
-  final Function onTap;
+  final double? padding;
+  final IconData? icon;
+  final Widget? right;
+  final Widget? beforeRight;
+  final String? text;
+  final Color? textColor;
+  final Function? onTap;
   const SettingRow({
-    Key key,
-    this.padding: 14,
+    Key? key,
+    this.padding = 14,
     this.icon,
     this.text,
     this.textColor,
@@ -241,7 +241,7 @@ class SettingRow extends StatelessWidget {
                 ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.symmetric(vertical: padding),
+              padding: EdgeInsets.symmetric(vertical: padding ?? 0),
               decoration: BoxDecoration(
                 border: Border(
                   bottom: BorderSide(color: ColorPlate.lightGray),

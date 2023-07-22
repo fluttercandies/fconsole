@@ -1,6 +1,6 @@
 name: fconsole
 description: A overlay console log list like v-console.
-version: 2.4.0
+version: 2.5.0
 homepage: https://github.com/fluttercandies/fconsole
 
 environment:
@@ -12,7 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   device_info_plus: ^8.0.0
-  intl: ^0.17.0
+  intl: any
   tapped: ^2.0.0
   animations: ^2.0.0
   left_scroll_actions: ^2.0.0
