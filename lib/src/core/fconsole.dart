@@ -5,8 +5,6 @@ import 'package:fconsole/src/model/log.dart';
 import 'package:fconsole/src/widget/messages.dart';
 import 'package:flutter/material.dart';
 
-import '../model/log.dart';
-
 typedef ErrHandler = void Function(
     Zone, ZoneDelegate, Zone, Object, StackTrace);
 

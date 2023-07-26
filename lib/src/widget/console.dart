@@ -39,7 +39,7 @@ void showConsole({BuildContext? context}) {
         consolePosition: consolePosition,
       );
     });
-    Overlay.of(context)!.insert(consoleEntry!);
+    Overlay.of(context).insert(consoleEntry!);
   }
 }
 
@@ -63,7 +63,7 @@ showConsolePanel(Function onHideTap, {BuildContext? context}) {
       hideConsolePanel();
     });
   });
-  Overlay.of(context)!.insert(consolePanelEntry!);
+  Overlay.of(context).insert(consolePanelEntry!);
 }
 
 hideConsolePanel() {

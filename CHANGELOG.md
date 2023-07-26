@@ -1,3 +1,7 @@
+## 2.5.1
+
+- Restore Mediaquery when render app.
+
 ## 2.5.0
 - Update example to null-safety.
 - Update intl version to any.
