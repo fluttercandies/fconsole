@@ -1,6 +1,6 @@
 ## 2.5.1
 
-- Restore Mediaquery when render app.
+- Restore Mediaquery when render app to avoid remove top safearea.
 
 ## 2.5.0
 - Update example to null-safety.

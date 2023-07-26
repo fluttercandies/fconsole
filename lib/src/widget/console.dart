@@ -118,7 +118,8 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery(
       /// 移除顶部安全区
-      data: MediaQueryData.fromWindow(window).removePadding(removeTop: true),
+      data: MediaQueryData.fromView(View.of(context))
+          .removePadding(removeTop: true),
       child: Material(
         child: _ConsoleTheme(
           consoleBtn: widget.consoleBtn,
@@ -128,7 +129,11 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
             child: Stack(
               textDirection: TextDirection.ltr,
               children: [
-                widget.child,
+                /// 恢复正常的安全区
+                MediaQuery(
+                  data: MediaQueryData.fromView(View.of(context)),
+                  child: widget.child,
+                ),
                 Localizations(
                   locale: Locale("zh"),
                   delegates: [
