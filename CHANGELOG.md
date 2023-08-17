@@ -1,3 +1,8 @@
+## 2.5.2
+
+- Now avoid modify the MediaQueryData above Material.
+- Improve example.
+
 ## 2.5.1
 
 - Restore Mediaquery when render app to avoid remove top safearea.

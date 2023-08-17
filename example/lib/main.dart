@@ -18,7 +18,7 @@ class MyCardDelegate extends FConsoleCardDelegate {
       defaultCards.logCard,
       defaultCards.flowCard,
       FConsoleCard(
-        name: "my",
+        name: "Custom",
         builder: (ctx) => CustomLogPage(),
       ),
       defaultCards.sysInfoCard,

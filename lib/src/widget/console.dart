@@ -116,49 +116,41 @@ class _ConsoleWidgetState extends State<ConsoleWidget> {
   }
 
   Widget build(BuildContext context) {
-    var mediaQuery = MediaQuery(
-      /// 移除顶部安全区
-      data: MediaQueryData.fromView(View.of(context))
-          .removePadding(removeTop: true),
-      child: Material(
-        child: _ConsoleTheme(
-          consoleBtn: widget.consoleBtn,
-          consolePosition: widget.consolePosition,
-          child: Directionality(
-            textDirection: TextDirection.ltr,
-            child: Stack(
-              textDirection: TextDirection.ltr,
-              children: [
-                /// 恢复正常的安全区
-                MediaQuery(
-                  data: MediaQueryData.fromView(View.of(context)),
-                  child: widget.child,
-                ),
-                Localizations(
-                  locale: Locale("zh"),
-                  delegates: [
-                    GlobalCupertinoLocalizations.delegate,
-                    GlobalMaterialLocalizations.delegate,
-                    GlobalWidgetsLocalizations.delegate,
-                  ],
-                  child: Overlay(
-                    initialEntries: [
-                      OverlayEntry(
-                        builder: (ctx) {
-                          _contextMap[this] = ctx;
-                          return Container();
-                        },
-                      )
-                    ],
-                  ),
-                ),
+    Widget body = _ConsoleTheme(
+      consoleBtn: widget.consoleBtn,
+      consolePosition: widget.consolePosition,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Stack(
+          textDirection: TextDirection.ltr,
+          children: [
+            /// 恢复正常的安全区
+            widget.child,
+            Localizations(
+              locale: Locale("zh"),
+              delegates: [
+                GlobalCupertinoLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
               ],
+              child: Overlay(
+                initialEntries: [
+                  OverlayEntry(
+                    builder: (ctx) {
+                      _contextMap[this] = ctx;
+                      return Container();
+                    },
+                  )
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
-    return mediaQuery;
+    return Material(
+      child: body,
+    );
   }
 }
 

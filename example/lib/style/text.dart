@@ -37,7 +37,6 @@ class StText extends StatelessWidget {
   final String? text;
   final TextStyle? style;
   final TextStyle? defaultStyle;
-  final bool? enableOffset;
   final int? maxLines;
 
   const StText({
@@ -45,7 +44,6 @@ class StText extends StatelessWidget {
     this.text,
     this.style,
     this.defaultStyle,
-    this.enableOffset: false,
     this.maxLines,
   }) : super(key: key);
 
@@ -60,7 +58,6 @@ class StText extends StatelessWidget {
           text: text,
           style: style,
           defaultStyle: StandardTextStyle.small,
-          enableOffset: enableOffset,
           maxLines: maxLines,
         );
 
@@ -75,7 +72,6 @@ class StText extends StatelessWidget {
           text: text,
           style: style,
           defaultStyle: StandardTextStyle.normal,
-          enableOffset: enableOffset,
           maxLines: maxLines,
         );
 
@@ -90,7 +86,6 @@ class StText extends StatelessWidget {
           text: text,
           style: style,
           defaultStyle: StandardTextStyle.big,
-          enableOffset: enableOffset,
           maxLines: maxLines,
         );
 
