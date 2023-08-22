@@ -60,9 +60,9 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
   }
 
   void calculatePosition() {
-    double width = MediaQueryData.fromWindow(window).size.width;
-    double height =
-        MediaQueryData.fromWindow(window).removePadding().size.height;
+    final size = MediaQueryData.fromView(View.of(context)).size;
+    double width = size.width;
+    double height = size.height;
 
     Alignment position = widget.consolePosition!;
     xPosition = position.x * width / 2 + width / 2;
@@ -77,7 +77,7 @@ class _ConsoleContainerState extends State<ConsoleContainer> {
     } else if (yPosition > height - childHeight) {
       yPosition = height - childHeight;
     }
-    yPosition = yPosition.clamp(20, yPosition);
+    yPosition = yPosition.clamp(20, 1e10);
   }
 
   @override
