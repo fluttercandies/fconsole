@@ -1,4 +1,6 @@
 ## 2.5.3
+- Update device_info_plus.
+## 2.5.3
 - Fix offset calculate bug.
 - Fix old API of flutter.
 
