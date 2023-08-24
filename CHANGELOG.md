@@ -1,4 +1,4 @@
-## 2.5.3
+## 2.5.4
 - Update device_info_plus.
 ## 2.5.3
 - Fix offset calculate bug.
