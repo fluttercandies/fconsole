@@ -1,6 +1,13 @@
+## 2.6.0
+
+- Add FlowLog.addGlobalListener.
+
 ## 2.5.4
+
 - Update device_info_plus.
+
 ## 2.5.3
+
 - Fix offset calculate bug.
 - Fix old API of flutter.
 
@@ -14,6 +21,7 @@
 - Restore Mediaquery when render app to avoid remove top safearea.
 
 ## 2.5.0
+
 - Update example to null-safety.
 - Update intl version to any.
 
@@ -22,7 +30,9 @@
 - Always keep moveable fconsole bubble in safearea now.
 - Add stack trance info to default catch.
 - Can view and copy stack trace info of error log now.
+
 ## 2.3.1
+
 - Update device_info_plus version.
 
 ## 2.3.0

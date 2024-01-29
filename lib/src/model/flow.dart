@@ -22,6 +22,15 @@ class FlowLogDesc {
   }
 }
 
+enum FlowLogEvent {
+  start,
+  log,
+  error,
+  end,
+}
+
+Set<Function(FlowLogEvent, FlowLog)> _callers = Set();
+
 // 一个工作流
 class FlowLog {
   final String name;
@@ -31,6 +40,24 @@ class FlowLog {
   List<Log>? logs;
 
   DateTime? createdAt;
+
+  static addGlobalListener(void Function(FlowLogEvent, FlowLog) listener) {
+    _callers.add(listener);
+  }
+
+  static removeGlobalListener(void Function(FlowLogEvent, FlowLog) listener) {
+    _callers.remove(listener);
+  }
+
+  static clearGlobalListener() {
+    _callers.clear();
+  }
+
+  _emit(FlowLogEvent event, FlowLog log) {
+    for (var call in _callers) {
+      call.call(event, log);
+    }
+  }
 
   /// 超时时间，如果超过这个时间就算作一个新Flow
   final Duration? timeout;
@@ -45,19 +72,24 @@ class FlowLog {
     this.createdAt,
     DateTime? end,
     this.id = '',
+    required bool hasError,
   }) : _endAt = end {
     logs ??= [];
+    _hasError = hasError;
   }
 
+  bool _hasError = false;
+
   FlowLog({
-    this.name: "system",
-    this.id: "",
+    this.name = "system",
+    this.id = "",
     this.logs,
     Duration? timeout: const Duration(seconds: 30),
   })  : createdAt = DateTime.now(),
         this.timeout = timeout ?? const Duration(seconds: 30) {
     logs ??= [];
     FlowCenter.instance.workingFlow[name + id] = this;
+    _emit(FlowLogEvent.start, this);
   }
 
   DateTime? get latestTime {
@@ -94,6 +126,12 @@ class FlowLog {
         timer = null;
       });
     }
+    if (log.type == LogType.error) {
+      _hasError = true;
+      _emit(FlowLogEvent.error, this);
+    } else {
+      _emit(FlowLogEvent.error, this);
+    }
     this.logs!.add(log);
     FlowCenter.instance._notify();
   }
@@ -114,19 +152,27 @@ class FlowLog {
   /// 结束当前Flow
   end([dynamic log, LogType? type]) {
     if (log != null) {
+      if (log.type == LogType.error) {
+        _hasError = true;
+      }
       this.logs!.add(Log(log, type ?? LogType.log));
     }
+
     timer?.cancel();
     timer = null;
     _endAt = DateTime.now();
-    // 拷贝一份去
-    FlowCenter.instance.flowList.add(FlowLog._(
+    final newLog = FlowLog._(
       name: name,
       logs: List.from(logs!),
       timeout: timeout,
       createdAt: createdAt,
       end: endAt,
-    ));
+      id: id,
+      hasError: _hasError,
+    );
+    // 拷贝一份去
+    FlowCenter.instance.flowList.add(newLog);
+    _emit(FlowLogEvent.end, newLog);
     this.createdAt = DateTime.now();
     this._endAt = null;
     FlowCenter.instance.workingFlow.remove(name + id);
