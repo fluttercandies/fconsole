@@ -1,3 +1,7 @@
+## 2.6.1
+
+- Fix bug.
+
 ## 2.6.0
 
 - Add FlowLog.addGlobalListener.

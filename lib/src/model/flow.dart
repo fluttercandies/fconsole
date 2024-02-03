@@ -152,7 +152,7 @@ class FlowLog {
   /// 结束当前Flow
   end([dynamic log, LogType? type]) {
     if (log != null) {
-      if (log.type == LogType.error) {
+      if (type == LogType.error) {
         _hasError = true;
       }
       this.logs!.add(Log(log, type ?? LogType.log));
