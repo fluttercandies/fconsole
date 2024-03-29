@@ -182,17 +182,19 @@ class _Row extends StatelessWidget {
   final bool isProcessing;
   final Function? onTap;
   final Function? onShare;
+
   const _Row({
     Key? key,
     this.title,
     this.desc,
     this.detail1,
     this.detail2,
-    this.isWarning: false,
-    this.isProcessing: false,
+    this.isWarning = false,
+    bool isProcessing = false,
     this.onTap,
     this.onShare,
-  }) : super(key: key);
+  })  : this.isProcessing = isProcessing,
+        super(key: key);
 
   Icon get icon {
     if (isWarning!) {
@@ -295,7 +297,7 @@ class _Row extends StatelessWidget {
 class _TapBtn extends StatelessWidget {
   final String? title;
   final double space;
-  final double? minwidth;
+  final double? minWidth;
   final bool selected;
   final bool small;
   final Function? onTap;
@@ -303,17 +305,18 @@ class _TapBtn extends StatelessWidget {
   const _TapBtn({
     Key? key,
     this.title,
-    this.space: 24,
-    this.selected: false,
+    this.space = 24,
+    this.selected = false,
     this.onTap,
-    this.small: false,
-    this.minwidth,
-  }) : super(key: key);
+    this.small = false,
+    double? minWidth,
+  })  : this.minWidth = minWidth,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minWidth: minwidth ?? 60),
+      constraints: BoxConstraints(minWidth: minWidth ?? 60),
       child: GestureDetector(
         onTap: onTap as void Function()?,
         behavior: HitTestBehavior.translucent,

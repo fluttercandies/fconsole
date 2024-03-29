@@ -45,7 +45,7 @@ class StText extends StatelessWidget {
     this.text,
     this.style,
     this.defaultStyle,
-    this.enableOffset: false,
+    this.enableOffset = false,
     this.maxLines,
   }) : super(key: key);
 

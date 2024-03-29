@@ -270,7 +270,7 @@ class _ActBtn extends StatelessWidget {
     Key? key,
     required this.onTap,
     this.child,
-    this.right: false,
+    this.right = false,
   }) : super(key: key);
 
   final bool right;
