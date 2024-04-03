@@ -16,6 +16,9 @@ class _ConsolePanelState extends State<ConsolePanel> {
 
   @override
   Widget build(BuildContext context) {
+    final MediaQueryData mediaQueryData =
+        MediaQueryData.fromView(View.of(context));
+
     var customCards =
         FConsole.instance.delegate?.cardsBuilder(DefaultCards()) ?? [];
 
@@ -80,7 +83,7 @@ class _ConsolePanelState extends State<ConsolePanel> {
               alignment: Alignment.bottomCenter,
               color: ColorPlate.white,
               width: double.infinity,
-              height: MediaQueryData.fromWindow(window).size.height * 0.8,
+              height: mediaQueryData.size.height * 0.8,
               child: Column(
                 children: <Widget>[
                   topOpViews,
@@ -106,7 +109,8 @@ class _ConsolePanelState extends State<ConsolePanel> {
   }
 
   get isDark =>
-      MediaQueryData.fromWindow(window).platformBrightness == Brightness.dark;
+      MediaQueryData.fromView(View.of(context)).platformBrightness ==
+      Brightness.dark;
 }
 
 class BottomActionView extends StatelessWidget {
@@ -119,10 +123,13 @@ class BottomActionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MediaQueryData mediaQueryData =
+        MediaQueryData.fromView(View.of(context));
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.only(
-        bottom: MediaQueryData.fromWindow(window).padding.bottom,
+        bottom: mediaQueryData.padding.bottom,
       ),
       decoration: BoxDecoration(
         color: ColorPlate.lightGray,
@@ -180,7 +187,7 @@ class BottomActionView extends StatelessWidget {
 class _TapBtn extends StatelessWidget {
   final String? title;
   final double space;
-  final double? minwidth;
+  final double? minWidth;
   final bool selected;
   final bool small;
   final Function? onTap;
@@ -188,17 +195,20 @@ class _TapBtn extends StatelessWidget {
   const _TapBtn({
     Key? key,
     this.title,
-    this.space: 24,
-    this.selected: false,
+    double space = 24,
+    this.selected = false,
     this.onTap,
-    this.small: false,
-    this.minwidth,
-  }) : super(key: key);
+    this.small = false,
+    double? minWidth,
+  })  :
+        this.space = space,
+        this.minWidth = minWidth,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minWidth: minwidth ?? 60),
+      constraints: BoxConstraints(minWidth: minWidth ?? 60),
       child: GestureDetector(
         onTap: onTap as void Function()?,
         behavior: HitTestBehavior.translucent,
@@ -495,7 +505,6 @@ class __LogListViewState extends State<_LogListView> {
         children: <Widget>[
           Expanded(
             child: CupertinoTextField(
-              toolbarOptions: ToolbarOptions(),
               controller: _filterTEC,
               clearButtonMode: OverlayVisibilityMode.editing,
               style: TextStyle(color: ColorPlate.black, fontSize: 16),

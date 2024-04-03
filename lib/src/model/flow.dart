@@ -84,7 +84,7 @@ class FlowLog {
     this.name = "system",
     this.id = "",
     this.logs,
-    Duration? timeout: const Duration(seconds: 30),
+    Duration? timeout = const Duration(seconds: 30),
   })  : createdAt = DateTime.now(),
         this.timeout = timeout ?? const Duration(seconds: 30) {
     logs ??= [];

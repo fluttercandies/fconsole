@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fconsole/fconsole.dart';
-import './style/color.dart';
 import './style/text.dart';
 import 'package:tapped/tapped.dart';
 

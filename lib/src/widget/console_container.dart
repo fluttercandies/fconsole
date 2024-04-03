@@ -169,12 +169,13 @@ class _TouchMoveState extends State<_TouchMoveView> {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQueryData.fromWindow(window).size.width;
-    double height = MediaQueryData.fromWindow(window).size.height;
+    final MediaQueryData mediaQueryData = MediaQueryData.fromView(View.of(context));
+    double width = mediaQueryData.size.width;
+    double height = mediaQueryData.size.height;
 
     /// keep safe area
-    double top = MediaQueryData.fromWindow(window).padding.top;
-    double btm = MediaQueryData.fromWindow(window).padding.bottom;
+    double top = mediaQueryData.padding.top;
+    double btm = mediaQueryData.padding.bottom;
     var _yPosition = yPosition;
     if (_yPosition < top) _yPosition = top;
     if (_yPosition > height - btm) _yPosition = height - btm;
