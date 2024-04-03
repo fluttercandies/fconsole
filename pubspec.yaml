@@ -16,7 +16,7 @@ dependencies:
   tapped: ^2.0.0
   animations: ^2.0.11
   left_scroll_actions: ^2.1.2
-  share_plus: ^8.0.2
+  share_plus: ^7.2.2
   json_view: ^0.4.2
 
 dev_dependencies:
