@@ -12,6 +12,7 @@ typedef ErrHandler = void Function(
 /// if some code run ouside runAppWithConsole, the log will not cache by fconsole.
 void runAppWithFConsole(
   Widget app, {
+  ConsoleOptions? options,
   Future Function()? beforeRun,
   FConsoleCardDelegate? delegate,
   ErrHandler? errHandler,
@@ -50,7 +51,7 @@ void runAppWithFConsole(
       await beforeRun?.call();
       runApp(
         ConsoleWidget(
-          options: ConsoleOptions(
+          options: options ?? ConsoleOptions(
             displayMode: ConsoleDisplayMode.Always,
           ),
           child: app,
