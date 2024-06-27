@@ -130,7 +130,7 @@ class FlowLog {
       _hasError = true;
       _emit(FlowLogEvent.error, this);
     } else {
-      _emit(FlowLogEvent.error, this);
+      _emit(FlowLogEvent.log, this);
     }
     this.logs!.add(log);
     FlowCenter.instance._notify();
