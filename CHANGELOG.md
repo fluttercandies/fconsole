@@ -1,3 +1,7 @@
+## 2.6.3
+
+- Print log text to debug console if copy or share flowlog.
+
 ## 2.6.2
 
 - Fix lint.

@@ -62,6 +62,7 @@ class _FlowLogDetailPageState extends State<FlowLogDetailPage> {
                 _ActBtn(
                   onTap: () {
                     Share.share(flowLog.shareText);
+                    print(json.encode(flowLog.shareText));
                   },
                   right: true,
                   child: Icon(
@@ -99,6 +100,7 @@ class _FlowLogDetailPageState extends State<FlowLogDetailPage> {
                             text: json.encode(log.log),
                           ),
                         );
+                        print(json.encode(log.log));
                         showFconsoleMessage("JSON Copy Success");
                       } else {
                         Clipboard.setData(
@@ -106,6 +108,7 @@ class _FlowLogDetailPageState extends State<FlowLogDetailPage> {
                             text: "${log.log}",
                           ),
                         );
+                        print(json.encode(log.log));
                         showFconsoleMessage("Copy Success");
                       }
                     },
